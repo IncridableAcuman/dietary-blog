@@ -1,11 +1,7 @@
-import { Button } from "./components/ui/button"
+import { AppRouter } from "./app/routes/routes"
 
 const App = () => {
-  return (
-    <div className="w-full h-screen flex items-center justify-center">
-      <Button variant={'outline'}>Hi Developer</Button>
-    </div>
-  )
+  return <AppRouter/>
 }
 
 export default App
