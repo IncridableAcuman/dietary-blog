@@ -1,7 +1,7 @@
 import Login from "@/features/auth/login/Login";
 import Register from "@/features/auth/register/Register";
+import BlogList from "@/pages/blog/lists/BlogList";
 import Home from "@/pages/home/Home";
-import BlogList from "@/pages/lists/BlogList";
 
 
 export const publicRoutes = [
