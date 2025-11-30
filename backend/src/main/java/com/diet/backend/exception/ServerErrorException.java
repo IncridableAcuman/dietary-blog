@@ -1,4 +1,7 @@
 package com.diet.backend.exception;
 
-public class ServerErrorException {
+public class ServerErrorException extends RuntimeException{
+    public ServerErrorException(String message){
+        super(message);
+    }
 }

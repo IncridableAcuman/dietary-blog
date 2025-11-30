@@ -1,1 +1,20 @@
-spring.application.name=backend
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc://postgresql://localhost:3306/postgres
+    username: postgres
+    password: 1234
+    properties:
+      jpa:
+        show-sql: true
+        hibernate:
+          ddl-auto: update
+
+
+jwt:
+  secret: uzbekistan_uzbekistan_0123456789
+  access_time: 96000
+  refresh_time: 604800000
