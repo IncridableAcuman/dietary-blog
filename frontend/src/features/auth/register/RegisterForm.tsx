@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { UserSchema } from "../model/user.schema";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -29,8 +29,9 @@ const RegisterForm = () => {
                 <FormItem className="w-full">
                   <FormLabel>First Name</FormLabel>
                   <FormControl>
-                    <Input type="text" placeholder="Izzatbek" {...field} required />
+                    <Input type="text" placeholder="Izzatbek" {...field} />
                   </FormControl>
+                  <FormMessage/>
                 </FormItem>
               )}
             />
@@ -41,8 +42,9 @@ const RegisterForm = () => {
                 <FormItem className="w-full">
                   <FormLabel>Last Name</FormLabel>
                   <FormControl>
-                    <Input type="text" placeholder="Abdusharipov" {...field} required />
+                    <Input type="text" placeholder="Abdusharipov" {...field} />
                   </FormControl>
+                   <FormMessage/>
                 </FormItem>
               )}
             />
@@ -54,8 +56,9 @@ const RegisterForm = () => {
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input type="text" placeholder="IncridableAcuman" {...field} required />
+                  <Input type="text" placeholder="IncridableAcuman" {...field} />
                 </FormControl>
+                 <FormMessage/>
               </FormItem>
             )}
           />
@@ -66,8 +69,9 @@ const RegisterForm = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="abdusharipovizzat03@gmail.com" {...field} required />
+                  <Input type="email" placeholder="abdusharipovizzat03@gmail.com" {...field} />
                 </FormControl>
+                 <FormMessage/>
               </FormItem>
             )}
           />
@@ -78,12 +82,13 @@ const RegisterForm = () => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="********" {...field} required />
+                  <Input type="password" placeholder="********" {...field}  />
                 </FormControl>
+                <FormMessage/>
               </FormItem>
             )}
           />
-          <Button variant={'secondary'} className="w-full" >Sign Up Now</Button>
+          <Button variant={'secondary'} className="w-full shadow-md" >Sign Up Now</Button>
         </form>
         <p className="text-center text-xs py-4">or</p>
         <div className="flex items-center justify-center gap-3">
