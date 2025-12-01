@@ -1,0 +1,5 @@
+.bg_image{
+    background-image: url("../../../public/food.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+}
