@@ -1,0 +1,10 @@
+.gradle/
+.build/
+.idea/
+.vscode/
+*.iml
+gradle-wrapper.jar
+Dockerfile
+docker-compose.yaml
+.env
+.gitignore
