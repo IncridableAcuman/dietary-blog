@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 
 const Navbar = ({setOpen}:{open:boolean,setOpen:(value:boolean) =>void}) => {
   return (
-    <div className="fixed top-0 left-0 w-full flex items-center justify-between gap-4 pdg bg-gray-900 opacity-80">
+    <div className="fixed top-0 left-0 w-full flex items-center justify-between gap-4 py-4 px-4 sm:px-6 md:px-8 lg:px-10 bg-gray-900 opacity-80">
       <Link to={"/"} className="text-lg font-semibold md:text-xl">Diet<span className="text-green-500">BP</span></Link>
       <div className="flex items-center gap-4 sm:gap-6 md:gap-8 lg:gap-10">
         <Link to={"/"} className="hover:bg-green-500 hover:text-white transition duration-300 py-2.5 px-3 rounded-md">Home</Link>
