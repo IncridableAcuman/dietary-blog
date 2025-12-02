@@ -11,9 +11,9 @@ const SidebarSheet = ({open,setOpen}:{open:boolean,setOpen:(value:boolean)=>void
                 </SheetTrigger>
                 <SheetContent className="pt-12">
                     <div className="flex flex-col items-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 p-3">
-                        <Link to={"/"} className="hover:bg-green-500 hover:text-white transition duration-300 py-2.5 px-3 rounded-md w-full mx-auto text-center">Home</Link>
-                        <Link to={"/"} className="hover:bg-green-500 hover:text-white transition duration-300 py-2.5 px-3 w-full mx-auto text-center rounded-md">About</Link>
-                        <Link to={"/"} className="hover:bg-green-500 hover:text-white transition duration-300 py-2.5 px-3 rounded-md w-full mx-auto text-center">Blogs</Link>
+                        <Link to={"/"} className="hover:bg-green-500 hover:text-white transition duration-300 py-2.5 px-3 rounded-md w-full mx-auto text-center" onClick={()=>setOpen(false)}>Home</Link>
+                        <Link to={"/"} className="hover:bg-green-500 hover:text-white transition duration-300 py-2.5 px-3 w-full mx-auto text-center rounded-md" onClick={()=>setOpen(false)}>About</Link>
+                        <Link to={"/"} className="hover:bg-green-500 hover:text-white transition duration-300 py-2.5 px-3 rounded-md w-full mx-auto text-center" onClick={()=>setOpen(false)}>Blogs</Link>
                     </div>
                     <SheetFooter className="text-center">
                         <div className="flex items-center justify-center gap-3 text-gray-500">

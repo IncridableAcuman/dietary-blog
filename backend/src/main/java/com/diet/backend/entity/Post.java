@@ -1,11 +1,13 @@
 package com.diet.backend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.diet.backend.enums.Category;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "posts")
@@ -14,4 +16,24 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Post {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
+    private String content;
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    private String image;
+
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
+    LocalDateTime publishedDate;
 }
