@@ -7,7 +7,7 @@ const SidebarSheet = ({open,setOpen}:{open:boolean,setOpen:(value:boolean)=>void
         <div>
             <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger asChild>
-                    <Menu onClick={()=>setOpen(true)} />
+                    <Menu onClick={()=>setOpen(true)} className="cursor-pointer text-gray-300 hover:text-gray-100 transition duration-300" />
                 </SheetTrigger>
                 <SheetContent className="pt-12">
                     <div className="flex flex-col items-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 p-3">

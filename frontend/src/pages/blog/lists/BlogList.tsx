@@ -1,7 +1,10 @@
+import NavbarLayout from "@/widgets/navbar/NavbarLayout"
 
 const BlogList = () => {
   return (
-    <div>BlogList</div>
+    <div>
+      <NavbarLayout/>
+    </div>
   )
 }
 
