@@ -48,7 +48,7 @@ public class JwtUtil {
     public String generateAccessToken(User user){
         return generateToken(user,accessTime);
     }
-    public String refreshTime(User user){
+    public String refreshToken(User user){
         return generateToken(user,refreshTime);
     }
     public Claims extractClaim(String token){
