@@ -1,22 +1,17 @@
 server:
-  port: ${PORT}
+  port: 8080
 
 spring:
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
-    properties:
-      jpa:
-        show-sql: true
-        hibernate:
-          ddl-auto: update
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: dietary
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${MAIL_USER}
-    password: ${MAIL_PASS}
+    username: abdusharipovizzat03@gmail.com
+    password: clyp nvku jphl fjny
     properties:
       mail:
         smtp:
@@ -26,6 +21,6 @@ spring:
 
 
 jwt:
-  secret: ${SECRET}
-  access_time: ${ACCESS_TIME}
-  refresh_time: ${REFRESH_TIME}
+  secret: uzbekistan_uzbekistan_0123456789
+  access_time: 96000
+  refresh_time: 604800000

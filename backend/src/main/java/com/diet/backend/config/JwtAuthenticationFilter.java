@@ -1,5 +1,6 @@
 package com.diet.backend.config;
 
+import com.diet.backend.exception.UnAuthorizeException;
 import com.diet.backend.service.UserDetailsService;
 import com.diet.backend.util.JwtUtil;
 import jakarta.servlet.FilterChain;
@@ -36,10 +37,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         if (username!=null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails=this.service.loadUserByUsername(username);
-            if (jwtUtil.validateToken(jwt,username)){
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            try {
+                if (jwtUtil.validateToken(jwt,username)){
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                }
+            } catch (RuntimeException e) {
+                throw new UnAuthorizeException("User Unauthorized");
             }
         }
         filterChain.doFilter(request,response);

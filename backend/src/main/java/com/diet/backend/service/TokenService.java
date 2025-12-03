@@ -13,12 +13,12 @@ import java.time.LocalDateTime;
 public class TokenService {
     private final TokenRepository tokenRepository;
 
-    public Token create(User user,String refreshToken){
+    public void create(User user, String refreshToken){
         Token token =new Token();
         token.setUser(user);
         token.setRefreshToken(refreshToken);
         token.setExpiryDate(LocalDateTime.now().plusDays(7));
-        return tokenRepository.save(token);
+        tokenRepository.save(token);
     }
 
 }
