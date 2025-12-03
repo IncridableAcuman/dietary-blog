@@ -65,9 +65,10 @@ public class JwtUtil {
     public Date extractExpiryDate(String token){
         return extractClaim(token).getExpiration();
     }
-    public boolean validateToken(String token) throws BadRequestException {
+    public boolean validateToken(String token,String username) throws BadRequestException {
         try {
-            return extractExpiryDate(token).after(new Date());
+            final String extractUsername = extractSubject(token);
+            return (extractUsername.equals(username)) && extractExpiryDate(token).before(new Date());
         } catch (RuntimeException e) {
             throw new BadRequestException("Invalid token");
         }

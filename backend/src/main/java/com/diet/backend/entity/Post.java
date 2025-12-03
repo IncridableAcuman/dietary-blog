@@ -26,7 +26,7 @@ public class Post {
     @Column(nullable = false)
     private String content;
 
-    @OneToMany
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
