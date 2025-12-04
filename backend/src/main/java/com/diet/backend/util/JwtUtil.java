@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtUtil {
@@ -46,11 +48,11 @@ public class JwtUtil {
                 .signWith(signingKey)
                 .compact();
     }
-    public String generateAccessToken(User user){
-        return generateToken(user,accessTime);
-    }
-    public String generateRefreshToken(User user){
-        return generateToken(user,refreshTime);
+    public Map<String,String> getTokens(User user){
+        Map<String,String> tokens = new HashMap<>();
+        tokens.put("accessToken",generateToken(user,accessTime));
+        tokens.put("refreshToken",generateToken(user,refreshTime));
+        return tokens;
     }
     public Claims extractClaim(String token) throws BadRequestException {
         try {

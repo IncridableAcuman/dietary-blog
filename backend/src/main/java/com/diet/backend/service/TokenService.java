@@ -56,8 +56,8 @@ public class TokenService {
     }
     public Map<String,String> getTokens(User user){
         Map<String,String> tokens = new HashMap<>();
-        String accessToken = jwtUtil.generateAccessToken(user);
-        String refreshToken = jwtUtil.generateRefreshToken(user);
+        String accessToken = jwtUtil.getTokens(user).get("accessToken");
+        String refreshToken = jwtUtil.getTokens(user).get("refreshToken");
         tokens.put("accessToken",accessToken);
         tokens.put("refreshToken",refreshToken);
         return tokens;
