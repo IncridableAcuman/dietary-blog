@@ -1,5 +1,6 @@
 package com.diet.backend.controller;
 
+import com.diet.backend.dto.AuthRequest;
 import com.diet.backend.dto.AuthResponse;
 import com.diet.backend.dto.RegisterRequest;
 import com.diet.backend.service.AuthService;
@@ -18,5 +19,13 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request, HttpServletResponse response) throws BadRequestException {
             return ResponseEntity.ok(authService.register(request,response));
+    }
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request,HttpServletResponse response) throws BadRequestException {
+        return ResponseEntity.ok(authService.login(request,response));
+    }
+    @GetMapping("/refresh")
+    public ResponseEntity<AuthResponse> refresh(@CookieValue(name = "refreshToken",required = false) String refreshToken,HttpServletResponse response) throws BadRequestException {
+        return ResponseEntity.ok(authService.refresh(refreshToken,response));
     }
 }

@@ -4,14 +4,12 @@ server:
 spring:
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: dietary
+      uri: ${DB_URL}
   mail:
     host: smtp.gmail.com
     port: 587
-    username: abdusharipovizzat03@gmail.com
-    password: clyp nvku jphl fjny
+    username: ${MAIL_USER}
+    password: ${MAIL_PASS}
     properties:
       mail:
         smtp:
@@ -21,6 +19,6 @@ spring:
 
 
 jwt:
-  secret: uzbekistan_uzbekistan_0123456789
-  access_time: 96000
-  refresh_time: 604800000
+  secret: ${SECRET}
+  access_time: ${ACCESS_TIME}
+  refresh_time: ${REFRESH_TIME}

@@ -1,8 +1,12 @@
 package com.diet.backend.repository;
 
 import com.diet.backend.entity.Token;
-import org.bson.types.ObjectId;
+import com.diet.backend.entity.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface TokenRepository extends MongoRepository<Token, ObjectId> {
+import java.util.Optional;
+
+public interface TokenRepository extends MongoRepository<Token, String> {
+    Optional<Token> findByUser(User user);
+    Optional<Token> findByRefreshToken(String refreshToken);
 }

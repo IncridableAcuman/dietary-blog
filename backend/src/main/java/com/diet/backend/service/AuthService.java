@@ -1,9 +1,11 @@
 package com.diet.backend.service;
 
+import com.diet.backend.dto.AuthRequest;
 import com.diet.backend.dto.AuthResponse;
 import com.diet.backend.dto.RegisterRequest;
 import com.diet.backend.entity.User;
 import com.diet.backend.enums.Role;
+import com.diet.backend.exception.NotFoundException;
 import com.diet.backend.repository.UserRepository;
 import com.diet.backend.util.CookieUtil;
 import com.diet.backend.util.JwtUtil;
@@ -54,5 +56,61 @@ public class AuthService {
                 user.getAvatar(),
                 accessToken
         );
+    }
+    @Transactional
+    public AuthResponse login(AuthRequest request,HttpServletResponse response) throws BadRequestException {
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(()-> new NotFoundException("User not found"));
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())){
+            throw new BadRequestException("Invalid password");
+        }
+        String accessToken = jwtUtil.generateAccessToken(user);
+        String refreshToken = jwtUtil.refreshToken(user);
+        tokenService.regenerateToken(user,refreshToken);
+        cookieUtil.addCookie(refreshToken,response);
+        return new AuthResponse(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole(),
+                user.getAvatar(),
+                accessToken
+        );
+    }
+    @Transactional
+    public AuthResponse refresh(String refreshToken,HttpServletResponse response) throws BadRequestException {
+        if (refreshToken == null || !refreshToken.startsWith("Bearer ")){
+            throw new BadRequestException("Invalid token");
+        }
+        String username = jwtUtil.extractSubject(refreshToken);
+        if (jwtUtil.validateToken(refreshToken,username)){
+            throw new BadRequestException("Invalid token");
+        }
+        User user = userRepository.findByUsername(username).orElseThrow(()->new NotFoundException("User not found"));
+        String accessToken = jwtUtil.generateAccessToken(user);
+        String newRefreshToken = jwtUtil.refreshToken(user);
+        tokenService.regenerateToken(user,newRefreshToken);
+        cookieUtil.addCookie(newRefreshToken,response);
+        return new AuthResponse(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole(),
+                user.getAvatar(),
+                accessToken
+        );
+    }
+    @Transactional
+    public void logout(String refreshToken,HttpServletResponse response) throws BadRequestException {
+        String username = jwtUtil.extractSubject(refreshToken);
+        if (jwtUtil.validateToken(refreshToken,username)){
+            throw new BadRequestException("Invalid token");
+        }
+        User user = userRepository.findByUsername(username).orElseThrow(()->new NotFoundException("User not found"));
+        tokenService.removeToken(user);
+        cookieUtil.clearCookie(response);
     }
 }

@@ -4,7 +4,6 @@ import com.diet.backend.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,7 +20,7 @@ import java.util.List;
 @Data
 public class User implements UserDetails {
     @Id
-    private ObjectId id;
+    private String id;
 
     private String firstName;
 
