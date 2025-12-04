@@ -5,7 +5,6 @@ import com.diet.backend.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,15 +14,15 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final AuthService authService;
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request, HttpServletResponse response) throws BadRequestException {
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request, HttpServletResponse response){
             return ResponseEntity.ok(authService.register(request,response));
     }
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request,HttpServletResponse response) throws BadRequestException {
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request,HttpServletResponse response) {
         return ResponseEntity.ok(authService.login(request,response));
     }
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@CookieValue(name = "refreshToken",required = false) String refreshToken,HttpServletResponse response) throws BadRequestException {
+    public ResponseEntity<String> logout(@CookieValue(name = "refreshToken",required = false) String refreshToken,HttpServletResponse response) {
         authService.logout(refreshToken,response);
         return ResponseEntity.ok("Logged out");
     }
@@ -33,7 +32,7 @@ public class AuthController {
         return ResponseEntity.ok("Reset Password link sent to email");
     }
     @GetMapping("/refresh")
-    public ResponseEntity<AuthResponse> refresh(@CookieValue(name = "refreshToken",required = false) String refreshToken,HttpServletResponse response) throws BadRequestException {
+    public ResponseEntity<AuthResponse> refresh(@CookieValue(name = "refreshToken",required = false) String refreshToken,HttpServletResponse response)  {
         return ResponseEntity.ok(authService.refresh(refreshToken,response));
     }
     @GetMapping("/me")
@@ -41,7 +40,7 @@ public class AuthController {
         return ResponseEntity.ok(authService.getMe());
     }
     @PutMapping("/reset-password")
-    public ResponseEntity<String> updatePassword(@Valid @RequestBody ResetPasswordRequest request) throws BadRequestException {
+    public ResponseEntity<String> updatePassword(@Valid @RequestBody ResetPasswordRequest request)  {
         authService.updatePassword(request);
         return ResponseEntity.ok("Password updated successfully");
     }

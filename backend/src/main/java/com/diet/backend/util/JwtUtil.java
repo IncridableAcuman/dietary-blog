@@ -1,13 +1,13 @@
 package com.diet.backend.util;
 
 import com.diet.backend.entity.User;
+import com.diet.backend.exception.BadRequestException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
-import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -49,7 +49,7 @@ public class JwtUtil {
     public String generateAccessToken(User user){
         return generateToken(user,accessTime);
     }
-    public String refreshToken(User user){
+    public String generateRefreshToken(User user){
         return generateToken(user,refreshTime);
     }
     public Claims extractClaim(String token) throws BadRequestException {
@@ -64,13 +64,13 @@ public class JwtUtil {
             throw new BadRequestException(e.getMessage());
         }
     }
-    public String extractSubject(String token) throws BadRequestException {
+    public String extractSubject(String token)  {
         return extractClaim(token).getSubject();
     }
     public Date extractExpiryDate(String token) throws BadRequestException {
         return extractClaim(token).getExpiration();
     }
-    public boolean validateToken(String token,String username) throws BadRequestException {
+    public boolean validateToken(String token,String username) {
         try {
             final String extractUsername = extractSubject(token);
             return (extractUsername.equals(username)) && extractExpiryDate(token).after(new Date());
