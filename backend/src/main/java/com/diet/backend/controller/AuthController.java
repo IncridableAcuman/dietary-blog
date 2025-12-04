@@ -1,8 +1,6 @@
 package com.diet.backend.controller;
 
-import com.diet.backend.dto.AuthRequest;
-import com.diet.backend.dto.AuthResponse;
-import com.diet.backend.dto.RegisterRequest;
+import com.diet.backend.dto.*;
 import com.diet.backend.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -24,8 +22,27 @@ public class AuthController {
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request,HttpServletResponse response) throws BadRequestException {
         return ResponseEntity.ok(authService.login(request,response));
     }
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@CookieValue(name = "refreshToken",required = false) String refreshToken,HttpServletResponse response) throws BadRequestException {
+        authService.logout(refreshToken,response);
+        return ResponseEntity.ok("Logged out");
+    }
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request){
+        authService.forgotPassword(request);
+        return ResponseEntity.ok("Reset Password link sent to email");
+    }
     @GetMapping("/refresh")
     public ResponseEntity<AuthResponse> refresh(@CookieValue(name = "refreshToken",required = false) String refreshToken,HttpServletResponse response) throws BadRequestException {
         return ResponseEntity.ok(authService.refresh(refreshToken,response));
+    }
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getMe(){
+        return ResponseEntity.ok(authService.getMe());
+    }
+    @PutMapping("/reset-password")
+    public ResponseEntity<String> updatePassword(@Valid @RequestBody ResetPasswordRequest request) throws BadRequestException {
+        authService.updatePassword(request);
+        return ResponseEntity.ok("Password updated successfully");
     }
 }

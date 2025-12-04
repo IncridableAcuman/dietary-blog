@@ -2,6 +2,7 @@ package com.diet.backend.util;
 
 import com.diet.backend.entity.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -51,18 +52,22 @@ public class JwtUtil {
     public String refreshToken(User user){
         return generateToken(user,refreshTime);
     }
-    public Claims extractClaim(String token){
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(signingKey)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+    public Claims extractClaim(String token) throws BadRequestException {
+        try {
+            return Jwts
+                    .parserBuilder()
+                    .setSigningKey(signingKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (JwtException e){
+            throw new BadRequestException(e.getMessage());
+        }
     }
-    public String extractSubject(String token){
+    public String extractSubject(String token) throws BadRequestException {
         return extractClaim(token).getSubject();
     }
-    public Date extractExpiryDate(String token){
+    public Date extractExpiryDate(String token) throws BadRequestException {
         return extractClaim(token).getExpiration();
     }
     public boolean validateToken(String token,String username) throws BadRequestException {
