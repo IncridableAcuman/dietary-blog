@@ -3,6 +3,7 @@ package com.diet.backend.util;
 import com.diet.backend.entity.User;
 import com.diet.backend.exception.BadRequestException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -62,8 +63,12 @@ public class JwtUtil {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-        } catch (JwtException e){
-            throw new BadRequestException(e.getMessage());
+        }
+        catch (ExpiredJwtException e){
+            return e.getClaims();
+        }
+        catch (JwtException e){
+            throw new BadRequestException("Invalid token: " + e.getMessage());
         }
     }
     public String extractSubject(String token)  {
@@ -75,7 +80,10 @@ public class JwtUtil {
     public boolean validateToken(String token,String username) {
         try {
             final String extractUsername = extractSubject(token);
-            return (extractUsername.equals(username)) && extractExpiryDate(token).after(new Date());
+            if (extractExpiryDate(token).after(new Date())){
+                return false;
+            }
+            return extractUsername.equals(username);
         } catch (RuntimeException e) {
             throw new BadRequestException("Invalid token");
         }

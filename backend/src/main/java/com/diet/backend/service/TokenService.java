@@ -7,6 +7,7 @@ import com.diet.backend.exception.NotFoundException;
 import com.diet.backend.repository.TokenRepository;
 import com.diet.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,8 @@ import java.util.Optional;
 public class TokenService {
     private final TokenRepository tokenRepository;
     private final JwtUtil jwtUtil;
+    @Value("${jwt.refresh_time}")
+    private Long refreshTime;
 
     @Transactional
     public void create(User user, String refreshToken){

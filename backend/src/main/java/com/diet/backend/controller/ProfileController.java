@@ -1,13 +1,20 @@
 package com.diet.backend.controller;
 
+import com.diet.backend.dto.UserRequest;
+import com.diet.backend.dto.UserResponse;
 import com.diet.backend.service.ProfileService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@RestControllerAdvice
+@RestController
 @RequestMapping("/api/profile")
 @RequiredArgsConstructor
 public class ProfileController {
     private final ProfileService profileService;
+
+    @PatchMapping("/edit")
+    public ResponseEntity<UserResponse> editProfile(@RequestParam String id, @ModelAttribute UserRequest request){
+        return ResponseEntity.ok(profileService.editProfile(id,request));
+    }
 }
