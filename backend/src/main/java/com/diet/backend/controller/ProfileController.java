@@ -1,5 +1,6 @@
 package com.diet.backend.controller;
 
+import com.diet.backend.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -8,4 +9,5 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RequestMapping("/api/profile")
 @RequiredArgsConstructor
 public class ProfileController {
+    private final ProfileService profileService;
 }

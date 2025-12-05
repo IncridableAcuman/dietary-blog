@@ -2,6 +2,9 @@ server:
   port: 8080
 
 spring:
+  servlet:
+    max-file-size: 2MB
+    max-request-size: 2MB
   data:
     mongodb:
       uri: ${DB_URL}
@@ -22,3 +25,6 @@ jwt:
   secret: ${SECRET}
   access_time: ${ACCESS_TIME}
   refresh_time: ${REFRESH_TIME}
+
+file:
+  direct: ${UPLOAD_DIRECTION}
