@@ -10,7 +10,7 @@ const About = () => {
   return (
     <div className="w-full min-h-screen pdg">
       <NavbarLayout/>
-      <div className="bg-gray-900 text-white">
+      <div className="">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6 md:gap-8 lg:gap-10 pt-24">
           <img src="pexels-thelazyartist-1332313.jpg" alt="image" className="w-full min-w-[50%] rounded-lg" />
           <div className="space-y-4">
@@ -29,20 +29,20 @@ const About = () => {
                possimus laudantium aspernatur quos repudiandae error natus qui assumenda perspiciatis delectus optio ex atque id.</p>
           </div>
         </div>
-        <div className="shadow-md cursor-pointer grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-12 p-6 bg-gray-900">
+        <div className="shadow-md cursor-pointer grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-12 p-6 ">
           <img src="pexels-saramazin-19884480.jpg" alt="pexels-saramazin-19884480.jpg" className="rounded-md" />
           <img src="pexels-saramazin-19884480.jpg" alt="pexels-saramazin-19884480.jpg" className="rounded-md" />
           <img src="pexels-saramazin-19884480.jpg" alt="pexels-saramazin-19884480.jpg" className="rounded-md" />
           <img src="pexels-saramazin-19884480.jpg" alt="pexels-saramazin-19884480.jpg" className="rounded-md" />
         </div>
       </div>
-      <div className="bg-gray-900 py-24 sm:py-32">
+      <div className=" py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
           {stats.map((stat) => (
             <div key={stat.id} className="mx-auto flex max-w-xs flex-col gap-y-4">
-              <dt className="text-base/7 text-gray-400">{stat.name}</dt>
-              <dd className="order-first text-3xl font-semibold tracking-tight text-white sm:text-5xl">{stat.value}</dd>
+              <dt className="">{stat.name}</dt>
+              <dd className="order-first text-3xl font-semibold tracking-tight  sm:text-5xl">{stat.value}</dd>
             </div>
           ))}
         </dl>

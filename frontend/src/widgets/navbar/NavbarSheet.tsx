@@ -13,7 +13,7 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
         <Sheet open={open} onOpenChange={setOpen} >
             <SheetTrigger asChild>
             </SheetTrigger>
-            <SheetContent className="">
+            <SheetContent className="%">
                 <SheetHeader className="flex flex-col items-center justify-center pt-10">
                     <Avatar
                         className=""
@@ -32,22 +32,22 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
                         {userData
                             .map((user,index)=>(
                                <div className="space-y-4" key={index}>
-                                <div className="py-2">
-                                    <div className="flex items-center gap-3 text-sm text-gray-500">
+                                <div className="py-2 flex items-center">
+                                    <div className="flex items-center gap-3 text-sm e">
                                         <UserRound size={20} />
-                                        First Name
+                                        First Name: 
                                     </div>
                                     <p className="pl-8 font-bold text-gray-600">{user.firstName}</p>
                                 </div>
-                                <div className="py-2">
-                                    <div className="flex items-center gap-3 text-sm text-gray-500">
+                                <div className="flex items-center py-2">
+                                    <div className="flex items-center gap-3 text-sm ">
                                         <UserRound size={20} />
-                                        Last Name
+                                        Last Name:
                                     </div>
                                     <p className="pl-8 font-bold text-gray-600">{user.lastName}</p>
                                 </div>
-                                <div className="py-2">
-                                    <div className="flex items-center gap-3 text-sm text-gray-500">
+                                <div className="py-2 flex items-center">
+                                    <div className="flex items-center gap-3 text-sm">
                                         <UserRound size={20} />
                                         Username
                                     </div>
