@@ -29,11 +29,11 @@ const About = () => {
                possimus laudantium aspernatur quos repudiandae error natus qui assumenda perspiciatis delectus optio ex atque id.</p>
           </div>
         </div>
-        <div className="shadow-md cursor-pointer flex items-center gap-4 pt-12 p-6 bg-gray-900">
-          <img src="pexels-saramazin-19884480.jpg" alt="pexels-saramazin-19884480.jpg" className="w-1/4 h-80 rounded-md" />
-          <img src="pexels-saramazin-19884480.jpg" alt="pexels-saramazin-19884480.jpg" className="w-1/4 h-80 rounded-md" />
-          <img src="pexels-saramazin-19884480.jpg" alt="pexels-saramazin-19884480.jpg" className="w-1/4 h-80 rounded-md" />
-          <img src="pexels-saramazin-19884480.jpg" alt="pexels-saramazin-19884480.jpg" className="w-1/4 h-80 rounded-md" />
+        <div className="shadow-md cursor-pointer grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-12 p-6 bg-gray-900">
+          <img src="pexels-saramazin-19884480.jpg" alt="pexels-saramazin-19884480.jpg" className="rounded-md" />
+          <img src="pexels-saramazin-19884480.jpg" alt="pexels-saramazin-19884480.jpg" className="rounded-md" />
+          <img src="pexels-saramazin-19884480.jpg" alt="pexels-saramazin-19884480.jpg" className="rounded-md" />
+          <img src="pexels-saramazin-19884480.jpg" alt="pexels-saramazin-19884480.jpg" className="rounded-md" />
         </div>
       </div>
       <div className="bg-gray-900 py-24 sm:py-32">
