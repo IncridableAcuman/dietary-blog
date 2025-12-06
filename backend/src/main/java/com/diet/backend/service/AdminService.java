@@ -1,13 +1,35 @@
 package com.diet.backend.service;
 
+import com.diet.backend.dto.UserResponse;
+import com.diet.backend.entity.User;
+import com.diet.backend.enums.Role;
+import com.diet.backend.exception.NotFoundException;
 import com.diet.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class AdminService {
     private final UserRepository userRepository;
 
-
+    @Transactional
+    public UserResponse editRole(String id){
+        User user = userRepository.findById(id).orElseThrow(()-> new NotFoundException("User not found"));
+        if (user.getRole().equals(Role.USER)){
+            user.setRole(Role.ADMIN);
+        } else {
+            user.setRole(Role.USER);
+        }
+        return new UserResponse(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole(),
+                user.getAvatar()
+        );
+    }
 }
