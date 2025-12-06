@@ -1,5 +1,7 @@
 package com.diet.backend.entity;
 
+import com.diet.backend.enums.Category;
+import com.diet.backend.enums.PostTags;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -20,7 +22,8 @@ public class Post {
    private String content;
    private String authorId;
    private String image;
-   private List<String> tags;
+   private List<PostTags> tags;
+   private Category category;
    private LocalDateTime createdAt;
    private LocalDateTime updatedAt;
    private List<String> commentIds;
