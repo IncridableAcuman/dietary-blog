@@ -37,11 +37,11 @@ public class JwtUtil {
     public String generateToken(User user,Long expiryTime){
         return Jwts
                 .builder()
-                .setSubject(user.getEmail())
+                .setSubject(user.getUsername())
                 .claim("id",user.getId())
                 .claim("firstName",user.getFirstName())
                 .claim("lastName",user.getLastName())
-                .claim("username",user.getUsername())
+                .claim("email",user.getEmail())
                 .claim("role",user.getRole())
                 .claim("avatar",user.getAvatar())
                 .setExpiration(new Date(System.currentTimeMillis()+expiryTime))
