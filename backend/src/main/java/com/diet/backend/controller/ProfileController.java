@@ -14,7 +14,7 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @PatchMapping("/edit")
-    public ResponseEntity<UserResponse> editProfile(@RequestParam String id, @ModelAttribute UserRequest request){
-        return ResponseEntity.ok(profileService.editProfile(id,request));
+    public ResponseEntity<UserResponse> editProfile(@ModelAttribute UserRequest request){
+        return ResponseEntity.ok(profileService.editProfile(request));
     }
 }

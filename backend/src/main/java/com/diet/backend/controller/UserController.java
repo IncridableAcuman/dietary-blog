@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestControllerAdvice
+@RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
@@ -18,8 +18,8 @@ public class UserController {
     public ResponseEntity<List<UserResponse>> userList(){
         return ResponseEntity.ok(userService.userList());
     }
-    @GetMapping
-    public ResponseEntity<UserResponse> getAUserById(@RequestParam String id){
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponse> getAUserById(@PathVariable String id){
         return ResponseEntity.ok(userService.getAUserById(id));
     }
 }

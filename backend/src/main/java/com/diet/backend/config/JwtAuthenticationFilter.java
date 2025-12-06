@@ -3,11 +3,14 @@ package com.diet.backend.config;
 import com.diet.backend.exception.UnAuthorizeException;
 import com.diet.backend.service.UserDetailsService;
 import com.diet.backend.util.JwtUtil;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,15 +28,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain
+            @NotNull HttpServletResponse response,
+            @NotNull FilterChain filterChain
     ) throws ServletException, IOException {
         final String header = request.getHeader("Authorization");
         String jwt=null;
         String username=null;
         if (header != null && header.startsWith("Bearer ")){
             jwt=header.substring(7);
-            username=jwtUtil.extractSubject(jwt);
+            try {
+                username=jwtUtil.extractSubject(jwt);
+            } catch (ExpiredJwtException e){
+                throw new UnAuthorizeException("Token expired");
+            } catch (JwtException e){
+                throw new UnAuthorizeException("Invalid token");
+            }
         }
         if (username!=null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails=this.service.loadUserByUsername(username);
@@ -42,10 +51,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                } else {
+                    throw new UnAuthorizeException("Token is not valid");
                 }
             } catch (RuntimeException e) {
-                throw new UnAuthorizeException("User Unauthorized");
+                throw new UnAuthorizeException("User unauthorized");
             }
+
         }
         filterChain.doFilter(request,response);
     }

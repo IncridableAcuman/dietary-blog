@@ -6,6 +6,8 @@ import com.diet.backend.entity.User;
 import com.diet.backend.exception.NotFoundException;
 import com.diet.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,8 +17,12 @@ public class ProfileService {
     private final FileService fileService;
     private final UserRepository userRepository;
     @Transactional
-    public UserResponse editProfile(String id, UserRequest request){
-        User user = userRepository.findById(id).orElseThrow(()-> new NotFoundException("User not found"));
+    public UserResponse editProfile(UserRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        assert authentication != null;
+        User existUser = (User) authentication.getPrincipal();
+        assert existUser != null;
+        User user = userRepository.findById(existUser.getId()).orElseThrow(()-> new NotFoundException("User not found"));
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setUsername(request.getUsername());

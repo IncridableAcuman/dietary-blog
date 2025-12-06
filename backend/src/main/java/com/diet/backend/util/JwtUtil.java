@@ -37,11 +37,11 @@ public class JwtUtil {
     public String generateToken(User user,Long expiryTime){
         return Jwts
                 .builder()
-                .setSubject(user.getUsername())
+                .setSubject(user.getEmail())
                 .claim("id",user.getId())
                 .claim("firstName",user.getFirstName())
                 .claim("lastName",user.getLastName())
-                .claim("email",user.getEmail())
+                .claim("username",user.getUsername())
                 .claim("role",user.getRole())
                 .claim("avatar",user.getAvatar())
                 .setExpiration(new Date(System.currentTimeMillis()+expiryTime))
@@ -80,10 +80,7 @@ public class JwtUtil {
     public boolean validateToken(String token,String username) {
         try {
             final String extractUsername = extractSubject(token);
-            if (extractExpiryDate(token).after(new Date())){
-                return false;
-            }
-            return extractUsername.equals(username);
+            return extractExpiryDate(token).after(new Date()) && extractUsername.equals(username);
         } catch (RuntimeException e) {
             throw new BadRequestException("Invalid token");
         }

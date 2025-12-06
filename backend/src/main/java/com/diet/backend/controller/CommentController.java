@@ -2,10 +2,10 @@ package com.diet.backend.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.RestController;
 
-@RestControllerAdvice
-@RequestMapping("/api/comment")
+@RestController
+@RequestMapping("/api/comments")
 @RequiredArgsConstructor
 public class CommentController {
 }

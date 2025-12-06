@@ -12,7 +12,7 @@ import java.util.List;
 public class CorsConfig {
 
     @Bean
-    public CorsConfigurationSource configurationSource  (){
+    public CorsConfigurationSource corsConfigurationSource  (){
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
