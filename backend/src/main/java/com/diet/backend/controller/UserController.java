@@ -22,13 +22,4 @@ public class UserController {
     public ResponseEntity<UserResponse> getAUserById(@RequestParam String id){
         return ResponseEntity.ok(userService.getAUserById(id));
     }
-    @DeleteMapping
-    public ResponseEntity<UserResponse> deleteUserById(@RequestParam String id){
-        return ResponseEntity.ok(userService.deleteUserById(id));
-    }
-    @DeleteMapping
-    public ResponseEntity<String> deleteAllUsers(){
-        userService.deleteAllUsers();
-        return ResponseEntity.ok("Users deleted successfully");
-    }
 }

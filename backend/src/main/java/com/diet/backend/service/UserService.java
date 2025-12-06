@@ -45,26 +45,5 @@ public class UserService {
                 user.getAvatar()
         );
     }
-    @Transactional
-    public UserResponse deleteUserById(String id){
-        if (id == null){
-            throw new BadRequestException("Invalid id");
-        }
-        User user = userRepository.findById(id).orElseThrow(()->new NotFoundException("User not found"));
-        userRepository.delete(user);
-        return new UserResponse(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getRole(),
-                user.getAvatar()
-        );
-    }
-    @Transactional
-    public void deleteAllUsers(){
-        List<User> users = userRepository.findAll();
-        userRepository.deleteAll(users);
-    }
+
 }
