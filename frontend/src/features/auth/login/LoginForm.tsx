@@ -1,23 +1,47 @@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
-import { UserSchema } from "../model/user.schema";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
+import axiosInstance from "@/shared/api/axiosInstance";
+import { LoginSchema } from "../model/login.schema";
+import { useAuthStore } from "@/app/store/auth/auth.store";
+import type { LoginFormType } from "../model/loginForm.type";
 const LoginForm = () => {
-    const form = useForm({
-        resolver: zodResolver(UserSchema),
+    const navigate = useNavigate();
+    const {setUser,setIsLoading} = useAuthStore();
+
+    const form = useForm<LoginFormType>({
+        resolver: zodResolver(LoginSchema),
         defaultValues: {
             email: "",
             password: ""
         },
     });
+    const onSubmit = async (values: LoginFormType) =>{
+        try {
+            setIsLoading(true);
+            const {data} = await axiosInstance.post("/auth/login",values);
+            if(data){
+                localStorage.setItem("accessToken",data.accessToken);
+                setUser(data);
+                toast.success("Successfully");
+                navigate("/");
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Authentication failed:");
+        } finally{
+            setIsLoading(false);
+        }
+    }
     return (
         <>
             <Form {...form}>
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
                     <FormField
                         control={form.control}
                         name="email"
@@ -25,7 +49,7 @@ const LoginForm = () => {
                             <FormItem>
                                 <FormLabel>Email</FormLabel>
                                 <FormControl>
-                                    <Input type="email" placeholder="abdusharipovizzat03@gmail.com" {...field} />
+                                    <Input type="email" placeholder="abdusharipovizzat03@gmail.com" {...field}/>
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

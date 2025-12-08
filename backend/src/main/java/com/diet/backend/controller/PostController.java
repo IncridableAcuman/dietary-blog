@@ -16,7 +16,7 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
 
-    @PostMapping
+    @PostMapping("/post")
     public ResponseEntity<PostResponse> createPost(@ModelAttribute PostRequest postRequest){
         return ResponseEntity.ok(postService.createPost(postRequest));
     }
@@ -24,15 +24,15 @@ public class PostController {
     public ResponseEntity<List<PostResponse>> postsList(){
         return ResponseEntity.ok(postService.postsList());
     }
-    @GetMapping("/${id}")
+    @GetMapping("/{id}")
     public ResponseEntity<PostResponse> getPost(@PathVariable String id){
         return ResponseEntity.ok(postService.getPost(id));
     }
-    @DeleteMapping("/${id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<PostResponse> remove(@PathVariable String id){
         return ResponseEntity.ok(postService.remove(id));
     }
-    @PatchMapping("/${id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<PostResponse> editPost(@PathVariable String id,@Valid @RequestBody PostRequest request){
         return ResponseEntity.ok(postService.editPost(id,request));
     }
