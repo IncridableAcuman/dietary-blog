@@ -13,7 +13,7 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
         {firstName:"Izzatbek",lastName:"Abdusharipov",username:"IncridableAcuman",email:"example@gmail.com"}
     ];
     const navigate = useNavigate();
-    const {setIsLoading,setUser} = useAuthStore();
+    const {setIsLoading,setIsAuthenticed,setUser} = useAuthStore();
 
 
     const onSubmit = async ()=>{
@@ -26,11 +26,13 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
                 await new Promise(r => setTimeout(r,1000));
                 toast.success(data);
                 navigate("/login");
+                setIsAuthenticed(false);
                 setUser({} as IUser);
             }
         } catch (error) {
             console.log(error);
             toast.error("Logged out failed");
+            setIsAuthenticed(false);
         } finally{
             setIsLoading(false);
         }

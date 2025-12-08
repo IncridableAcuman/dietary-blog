@@ -13,7 +13,7 @@ import { LoginSchema } from "../schema/login.schema";
 import ForgotPassword from "../../forgot-password/pages/ForgotPassword";
 const LoginForm = () => {
     const navigate = useNavigate();
-    const {isLoading,setUser,setIsLoading} = useAuthStore();
+    const {isLoading,setIsAuthenticed, setUser,setIsLoading} = useAuthStore();
 
     const form = useForm<LoginFormType>({
         resolver: zodResolver(LoginSchema),
@@ -29,6 +29,7 @@ const LoginForm = () => {
             if(data){
                 localStorage.setItem("accessToken",data.accessToken);
                 setUser(data);
+                setIsAuthenticed(true)
                 await new Promise(r => setTimeout(r,1000));
                 toast.success("Successfully");
                 navigate("/");
@@ -36,6 +37,7 @@ const LoginForm = () => {
         } catch (error) {
             console.log(error);
             toast.error("Authentication failed:");
+            setIsAuthenticed(false);
         } finally{
             setIsLoading(false);
         }
