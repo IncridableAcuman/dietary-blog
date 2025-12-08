@@ -10,6 +10,7 @@ import axiosInstance from "@/shared/api/axiosInstance";
 import { useAuthStore } from "@/app/store/auth/auth.store";
 import type { LoginFormType } from "../types/loginForm.type";
 import { LoginSchema } from "../schema/login.schema";
+import ForgotPassword from "../../forgot-password/ForgotPassword";
 const LoginForm = () => {
     const navigate = useNavigate();
     const {isLoading,setUser,setIsLoading} = useAuthStore();
@@ -74,7 +75,9 @@ const LoginForm = () => {
                          <Checkbox/>
                          Remember me
                        </div>
-                        <Link to={"/forgot-password"} className="hover:underline">Forgot Password?</Link>
+                        <p className="hover:underline">
+                            <ForgotPassword/>
+                        </p>
                     </div>
                     <Button variant={'secondary'} className="w-full shadow-md" >{isLoading ? "Loading..." : "Sign In Now"}</Button>
                 </form>
