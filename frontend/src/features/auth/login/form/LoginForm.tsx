@@ -10,7 +10,7 @@ import axiosInstance from "@/shared/api/axiosInstance";
 import { useAuthStore } from "@/app/store/auth/auth.store";
 import type { LoginFormType } from "../types/loginForm.type";
 import { LoginSchema } from "../schema/login.schema";
-import ForgotPassword from "../../forgot-password/ForgotPassword";
+import ForgotPassword from "../../forgot-password/pages/ForgotPassword";
 const LoginForm = () => {
     const navigate = useNavigate();
     const {isLoading,setUser,setIsLoading} = useAuthStore();

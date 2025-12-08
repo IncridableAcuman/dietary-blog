@@ -1,4 +1,4 @@
-import ForgotPassword from "@/features/auth/forgot-password/ForgotPassword";
+import ForgotPassword from "@/features/auth/forgot-password/pages/ForgotPassword";
 import Login from "@/features/auth/login/pages/Login";
 import Register from "@/features/auth/register/pages/Register";
 import About from "@/pages/about/About";
