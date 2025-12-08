@@ -8,8 +8,14 @@ import { useForm } from "react-hook-form"
 import { UserSchema } from "../model/user.schema"
 import { Input } from "@/components/ui/input"
 import Footer from "@/widgets/footer/Footer"
+import { useAuthStore } from "@/app/store/auth/auth.store"
+import { useNavigate } from "react-router-dom"
+import { useEffect } from "react"
 
 const EditProfile = () => {
+    const { isAuthenticated } = useAuthStore();
+    const navigate = useNavigate();
+
     const form = useForm({
         resolver: zodResolver(UserSchema),
         defaultValues: {
@@ -19,6 +25,13 @@ const EditProfile = () => {
             avatar: ""
         },
     })
+
+    useEffect(()=> {
+        if(!isAuthenticated){
+            navigate("/");
+        }
+    },[isAuthenticated,navigate]);
+
     return (
         <>
             <div className="w-full min-h-screen bg_image">

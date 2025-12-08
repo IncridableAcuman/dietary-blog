@@ -1,4 +1,3 @@
-import { useAuthStore } from "@/app/store/auth/auth.store"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Footer from "@/widgets/footer/Footer"
@@ -7,8 +6,7 @@ import { Star } from "lucide-react"
 
 const Home = () => {
   // const navigate = useNavigate();
-  const {isAuthenticated} =useAuthStore();
-  console.log(isAuthenticated);
+
   // useEffect(() => {
   //   if (!localStorage.getItem("accessToken")) {
   //     navigate("/login");

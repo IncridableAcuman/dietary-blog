@@ -11,7 +11,7 @@ import axiosInstance from "@/shared/api/axiosInstance";
 import { RegisterSchema } from "../schema/register.schema";
 
 const RegisterForm = () => {
-  const {setIsLoading,setIsAuthenticed,setUser} = useAuthStore();
+  const {setIsLoading,login} = useAuthStore();
   const navigate = useNavigate();
   const form = useForm<RegisterSchemaType>({
     resolver: zodResolver(RegisterSchema),
@@ -30,15 +30,13 @@ const RegisterForm = () => {
       const {data} = await axiosInstance.post("/auth/register",values);
       if(data){
         localStorage.setItem("accessToken",data.accessToken);
-        setUser(data);
-        setIsAuthenticed(true);
+        login(data.accessToken);
         await new Promise(r => setTimeout(r,1000));
         toast.success("Successfully");
         navigate('/');
       }
     } catch (error) {
       console.log(error);
-      setIsAuthenticed(false);
       toast.error("Registration failed");
     } finally{
       setIsLoading(false);

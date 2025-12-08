@@ -13,7 +13,7 @@ import { LoginSchema } from "../schema/login.schema";
 import ForgotPassword from "../../forgot-password/pages/ForgotPassword";
 const LoginForm = () => {
     const navigate = useNavigate();
-    const {isLoading,setIsAuthenticed, setUser,setIsLoading} = useAuthStore();
+    const {isLoading,login,setIsAuthenticed,setIsLoading} = useAuthStore();
 
     const form = useForm<LoginFormType>({
         resolver: zodResolver(LoginSchema),
@@ -27,9 +27,7 @@ const LoginForm = () => {
             setIsLoading(true);
             const {data} = await axiosInstance.post("/auth/login",values);
             if(data){
-                localStorage.setItem("accessToken",data.accessToken);
-                setUser(data);
-                setIsAuthenticed(true)
+                login(data.accessToken);
                 await new Promise(r => setTimeout(r,1000));
                 toast.success("Successfully");
                 navigate("/");
