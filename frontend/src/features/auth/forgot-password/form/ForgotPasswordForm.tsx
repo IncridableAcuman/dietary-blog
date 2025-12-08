@@ -63,7 +63,7 @@ const ForgotPasswordForm = () => {
                 </Form>
                 <DialogFooter>
                     <DialogClose asChild>
-                        <Button className="w-full">Cancel</Button>
+                        <Button className="w-full" variant={'ghost'}>Cancel</Button>
                     </DialogClose>
                 </DialogFooter>
             </DialogContent>

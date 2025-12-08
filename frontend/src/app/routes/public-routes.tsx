@@ -1,6 +1,7 @@
 import ForgotPassword from "@/features/auth/forgot-password/pages/ForgotPassword";
 import Login from "@/features/auth/login/pages/Login";
 import Register from "@/features/auth/register/pages/Register";
+import ResetPassword from "@/features/auth/reset-password/pages/ResetPassword";
 import About from "@/pages/about/About";
 import BlogList from "@/pages/blog/lists/BlogList";
 import Home from "@/pages/home/Home";
@@ -13,4 +14,5 @@ export const publicRoutes = [
     {path:"/login",element:<Login/>},
     {path:"/register",element:<Register/>},
     {path:"/forgot-password",element:<ForgotPassword/>},
+    {path: "/reset-password",element:<ResetPassword/>}
 ]
