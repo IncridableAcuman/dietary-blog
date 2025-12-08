@@ -12,7 +12,7 @@ import { useAuthStore } from "@/app/store/auth/auth.store";
 import type { LoginFormType } from "../model/loginForm.type";
 const LoginForm = () => {
     const navigate = useNavigate();
-    const {setUser,setIsLoading} = useAuthStore();
+    const {isLoading,setUser,setIsLoading} = useAuthStore();
 
     const form = useForm<LoginFormType>({
         resolver: zodResolver(LoginSchema),
@@ -28,6 +28,7 @@ const LoginForm = () => {
             if(data){
                 localStorage.setItem("accessToken",data.accessToken);
                 setUser(data);
+                await new Promise(r => setTimeout(r,1000));
                 toast.success("Successfully");
                 navigate("/");
             }
@@ -75,7 +76,7 @@ const LoginForm = () => {
                        </div>
                         <Link to={"/forgot-password"} className="hover:underline">Forgot Password?</Link>
                     </div>
-                    <Button variant={'secondary'} className="w-full shadow-md" >Sign In Now</Button>
+                    <Button variant={'secondary'} className="w-full shadow-md" >{isLoading ? "Loading..." : "Sign In Now"}</Button>
                 </form>
                 <p className="text-center text-xs py-4">or</p>
                 <div className="flex items-center justify-center gap-3">

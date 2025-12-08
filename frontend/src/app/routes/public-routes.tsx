@@ -1,5 +1,5 @@
 import ForgotPassword from "@/features/auth/forgot-password/ForgotPassword";
-import Login from "@/features/auth/login/Login";
+import Login from "@/features/auth/login/pages/Login";
 import Register from "@/features/auth/register/Register";
 import About from "@/pages/about/About";
 import BlogList from "@/pages/blog/lists/BlogList";

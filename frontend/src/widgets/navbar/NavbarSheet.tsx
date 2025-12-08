@@ -1,14 +1,41 @@
+import { useAuthStore } from "@/app/store/auth/auth.store"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import type { IUser } from "@/features/auth/model/user.types"
+import axiosInstance from "@/shared/api/axiosInstance"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { Pen, UserRound } from "lucide-react"
 import { useNavigate } from "react-router-dom"
+import { toast } from "sonner"
 
 const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolean) => void }) => {
     const userData = [
         {firstName:"Izzatbek",lastName:"Abdusharipov",username:"IncridableAcuman",email:"example@gmail.com"}
     ];
     const navigate = useNavigate();
+    const {setIsLoading,setUser} = useAuthStore();
+
+
+    const onSubmit = async ()=>{
+
+        try {
+            setIsLoading(true);
+            const {data} = await axiosInstance.post('/auth/logout');
+            if(data){
+                localStorage.removeItem("accessToken");
+                await new Promise(r => setTimeout(r,1000));
+                toast.success(data);
+                navigate("/login");
+                setUser({} as IUser);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Logged out failed");
+        } finally{
+            setIsLoading(false);
+        }
+    }
+
     return (
         <Sheet open={open} onOpenChange={setOpen} >
             <SheetTrigger asChild>
@@ -60,7 +87,7 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
                 </div>
                 <SheetFooter>
                     <SheetClose asChild>
-                        <Button>Sign Out</Button>
+                        <Button onClick={()=>onSubmit()}>Sign Out</Button>
                     </SheetClose>
                 </SheetFooter>
             </SheetContent>
