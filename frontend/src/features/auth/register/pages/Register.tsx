@@ -1,5 +1,5 @@
 import NavbarLayout from "@/widgets/navbar/NavbarLayout"
-import RegisterForm from "./RegisterForm"
+import RegisterForm from "../form/RegisterForm"
 
 const Register = () => {
   return (

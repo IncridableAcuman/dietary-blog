@@ -7,9 +7,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import axiosInstance from "@/shared/api/axiosInstance";
-import { LoginSchema } from "../model/login.schema";
 import { useAuthStore } from "@/app/store/auth/auth.store";
-import type { LoginFormType } from "../model/loginForm.type";
+import type { LoginFormType } from "../types/loginForm.type";
+import { LoginSchema } from "../schema/login.schema";
 const LoginForm = () => {
     const navigate = useNavigate();
     const {isLoading,setUser,setIsLoading} = useAuthStore();

@@ -1,6 +1,6 @@
 import ForgotPassword from "@/features/auth/forgot-password/ForgotPassword";
 import Login from "@/features/auth/login/pages/Login";
-import Register from "@/features/auth/register/Register";
+import Register from "@/features/auth/register/pages/Register";
 import About from "@/pages/about/About";
 import BlogList from "@/pages/blog/lists/BlogList";
 import Home from "@/pages/home/Home";

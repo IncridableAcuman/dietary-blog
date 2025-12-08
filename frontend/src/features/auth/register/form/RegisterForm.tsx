@@ -1,14 +1,20 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
-import { UserSchema } from "../model/user.schema";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import type { RegisterSchemaType } from "../types/register.type";
+import { useAuthStore } from "@/app/store/auth/auth.store";
+import { toast } from "sonner";
+import axiosInstance from "@/shared/api/axiosInstance";
+import { RegisterSchema } from "../schema/register.schema";
 
 const RegisterForm = () => {
-  const form = useForm({
-    resolver: zodResolver(UserSchema),
+  const {setIsLoading,setUser} = useAuthStore();
+  const navigate = useNavigate();
+  const form = useForm<RegisterSchemaType>({
+    resolver: zodResolver(RegisterSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -17,10 +23,30 @@ const RegisterForm = () => {
       password: ""
     },
   });
+
+  const onSubmit = async (values:RegisterSchemaType) =>{
+    try {
+      setIsLoading(true);
+      const {data} = await axiosInstance.post("/auth/register",values);
+      if(data){
+        localStorage.setItem("accessToken",data.accessToken);
+        setUser(data);
+        await new Promise(r => setTimeout(r,1000));
+        toast.success("Successfully");
+        navigate('/');
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Registration failed");
+    } finally{
+      setIsLoading(false);
+    }
+  }
+
   return (
     <>
       <Form {...form}>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex flex-col md:flex-row items-center gap-3">
             <FormField
               control={form.control}

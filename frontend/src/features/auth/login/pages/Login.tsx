@@ -1,5 +1,5 @@
 import NavbarLayout from "@/widgets/navbar/NavbarLayout"
-import LoginForm from "./LoginForm"
+import LoginForm from "../form/LoginForm"
 
 const Login = () => {
   return (

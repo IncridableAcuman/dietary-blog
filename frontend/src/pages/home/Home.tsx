@@ -3,18 +3,16 @@ import { Input } from "@/components/ui/input"
 import Footer from "@/widgets/footer/Footer"
 import NavbarLayout from "@/widgets/navbar/NavbarLayout"
 import { Star } from "lucide-react"
-import { useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-
 
 const Home = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!localStorage.getItem("accessToken")) {
-      navigate("/login");
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   if (!localStorage.getItem("accessToken")) {
+  //     navigate("/login");
+  //   }
+  // }, [navigate]);
+
 
 
 return (

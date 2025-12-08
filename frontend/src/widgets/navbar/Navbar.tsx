@@ -5,7 +5,7 @@ import SidebarLayout from "../sidebar/SidebarLayout"
 const Navbar = ({ setOpen }: { open: boolean, setOpen: (value: boolean) => void }) => {
   return (
     <div className="fixed bg-white top-0 left-0 w-full flex items-center justify-between gap-4 py-4 px-4 sm:px-6 md:px-8 lg:px-10 z-50">
-      <Link to={"/"} className="text-lg font-semibold md:text-xl">Diet<span className="text-sky-500">BP</span></Link>
+      <Link to={"/"} className="text-lg font-semibold md:text-xl text-gray-900">Diet<span className="text-sky-500">BP</span></Link>
       <div className="hidden md:flex items-center gap-4 sm:gap-6 md:gap-8 lg:gap-10">
         <Link to={"/"} className="hover: text-gray-900 hover:text-gray-500 transition duration-300 py-2.5 px-3 rounded-md">Home</Link>
         <Link to={"/about"} className="text-gray-900 hover:text-gray-500 transition duration-300 py-2.5 px-3 rounded-md">About</Link>

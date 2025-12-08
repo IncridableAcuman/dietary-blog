@@ -40,7 +40,7 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
         <Sheet open={open} onOpenChange={setOpen} >
             <SheetTrigger asChild>
             </SheetTrigger>
-            <SheetContent className="%">
+            <SheetContent className="opacity-95">
                 <SheetHeader className="flex flex-col items-center justify-center pt-10">
                     <Avatar
                         className=""

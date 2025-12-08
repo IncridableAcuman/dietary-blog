@@ -11,7 +11,7 @@ const SidebarSheet = ({open,setOpen}:{open:boolean,setOpen:(value:boolean)=>void
                 <SheetTrigger asChild>
                     <Menu onClick={()=>setOpen(true)} className="cursor-pointer text-gray-500 hover:text-gray-900 transition duration-300" />
                 </SheetTrigger>
-                <SheetContent className="pt-12">
+                <SheetContent className="pt-12 opacity-95">
                     <div className="flex flex-col items-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 p-3">
                         <Link to={"/"} className="hover:bg-gray-800 hover:text-white transition duration-300 py-2.5 px-3 rounded-md w-full mx-auto text-center" onClick={()=>setOpen(false)}>Home</Link>
                         <Link to={"/"} className="hover:bg-gray-800 hover:text-white transition duration-300 py-2.5 px-3 w-full mx-auto text-center rounded-md" onClick={()=>setOpen(false)}>About</Link>
