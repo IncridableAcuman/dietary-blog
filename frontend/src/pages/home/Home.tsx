@@ -23,7 +23,7 @@ return (
           <NavbarLayout />
           <div className="space-y-4">
             <Button className="text-xs md:text-sm flex items-center gap-3 justify-center text-center mx-auto text-sky-500">New: AI feature integrated <Star size={15} /></Button>
-            <h1 className="text-3xl md:text-6xl font-bold text-center border-spacing-1.5">Your own <span className="text-sky-500">blogging</span> <br /><span>plstform.</span></h1>
+            <h1 className="text-3xl md:text-6xl font-bold text-center border-spacing-1.5">Your own <span className="text-sky-500">blogging</span> <br /><span>platform.</span></h1>
           </div>
           <div className="space-y-10">
             <p className="text-center">This is your space to think out loud, to share what matters, and to write without filters. <br /> Whether it's one word or a thousand, your story starts right here.</p>

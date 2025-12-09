@@ -12,7 +12,7 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
         { firstName: "Izzatbek", lastName: "Abdusharipov", username: "IncridableAcuman", email: "example@gmail.com" }
     ];
     const navigate = useNavigate();
-    const { setIsLoading, logout } = useAuthStore();
+    const { setIsLoading, logout} = useAuthStore();
     const { isAuthenticated } = useAuthStore();
 
 
@@ -34,6 +34,8 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
             setIsLoading(false);
         }
     }
+
+
 
     return (
         <Sheet open={open} onOpenChange={setOpen} >
@@ -91,7 +93,7 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
                     <SheetClose asChild>
                         {isAuthenticated && (
                             <Button onClick={() => onSubmit()}>Sign Out</Button>
-                        ) }
+                        )}
                     </SheetClose>
                 </SheetFooter>
             </SheetContent>
