@@ -8,6 +8,9 @@ import com.diet.backend.exception.BadRequestException;
 import com.diet.backend.exception.NotFoundException;
 import com.diet.backend.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -54,10 +57,11 @@ public class PostService {
         assert user != null;
         post.setAuthorId(user.getId());
         post.setCommentIds(Collections.singletonList("A"));
-        postRepository.save(post);
+        post = savePost(post);
         return postResponse(post);
     }
     @Transactional
+    @Cacheable(value = "posts", key = "'allPosts'")
     public List<PostResponse> postsList(){
         List<Post> posts = postRepository.findAll();
         return posts.stream().map(this::postResponse).toList();
@@ -68,6 +72,7 @@ public class PostService {
         return postResponse(post);
     }
     @Transactional
+    @CacheEvict(value = "posts",key = "#id")
     public PostResponse remove(String id){
         Post post = findPostById(id);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -99,11 +104,16 @@ public class PostService {
         post.setUpdatedAt(LocalDateTime.now());
         post.setAuthorId(user.getId());
         post.setCommentIds(Collections.singletonList("A"));
-        postRepository.save(post);
+        post = postRepository.save(post);
         return postResponse(post);
     }
     @Transactional
+    @Cacheable(value = "posts",key = "#id")
     public Post findPostById(String id){
         return postRepository.findById(id).orElseThrow(()->new NotFoundException("Post not found"));
+    }
+    @CachePut(value = "posts",key = "#result.id")
+    public Post savePost(Post post){
+        return postRepository.save(post);
     }
 }

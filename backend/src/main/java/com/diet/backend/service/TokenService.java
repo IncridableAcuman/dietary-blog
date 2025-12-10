@@ -7,7 +7,6 @@ import com.diet.backend.exception.UnAuthorizeException;
 import com.diet.backend.repository.TokenRepository;
 import com.diet.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +21,6 @@ import java.util.Optional;
 public class TokenService {
     private final TokenRepository tokenRepository;
     private final JwtUtil jwtUtil;
-    @Value("${jwt.refresh_time}")
-    private Long refreshTime;
 
     @Transactional
     public Token saveRefreshToken(User user,String refreshToken){
@@ -31,7 +28,7 @@ public class TokenService {
         Token token = optional.orElseGet(Token::new);
         token.setUser(user);
         token.setRefreshToken(refreshToken);
-        token.setExpiryDate(LocalDateTime.now().plusSeconds(refreshTime/1000));
+        token.setExpiryDate(LocalDateTime.now().plusSeconds(jwtUtil.getRefreshTime()/1000));
         return saveUser(token);
     }
     @Transactional

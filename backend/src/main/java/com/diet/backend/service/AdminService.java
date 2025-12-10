@@ -7,6 +7,7 @@ import com.diet.backend.exception.BadRequestException;
 import com.diet.backend.exception.NotFoundException;
 import com.diet.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,7 @@ public class AdminService {
     }
 
     @Transactional
+    @CacheEvict(value = "users",key = "#id")
     public UserResponse deleteUserById(String id){
         if (id == null){
             throw new BadRequestException("Invalid id");
@@ -54,6 +56,7 @@ public class AdminService {
         );
     }
     @Transactional
+    @CacheEvict(value = "users", key = "allUsers")
     public void deleteAllUsers(){
         List<User> users = userRepository.findAll();
         userRepository.deleteAll(users);
