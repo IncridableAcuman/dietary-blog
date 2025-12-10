@@ -2,6 +2,8 @@ package com.diet.backend.dto;
 
 import com.diet.backend.enums.Role;
 
+import java.io.Serializable;
+
 public record AuthResponse(
         String id,
         String firstName,
@@ -11,5 +13,5 @@ public record AuthResponse(
         Role role,
         String avatar,
         String accessToken
-) {
+) implements Serializable {
 }

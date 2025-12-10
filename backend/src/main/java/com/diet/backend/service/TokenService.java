@@ -8,6 +8,7 @@ import com.diet.backend.repository.TokenRepository;
 import com.diet.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +32,7 @@ public class TokenService {
         token.setUser(user);
         token.setRefreshToken(refreshToken);
         token.setExpiryDate(LocalDateTime.now().plusSeconds(refreshTime/1000));
-        return tokenRepository.save(token);
+        return saveUser(token);
     }
     @Transactional
     public void removeToken(User user){
@@ -57,5 +58,10 @@ public class TokenService {
     }
     public String extractUsername(String token){
         return jwtUtil.extractSubject(token);
+    }
+    @Transactional
+    @CachePut(value = "refreshToken",key = "'token'")
+    public Token saveUser(Token token){
+        return tokenRepository.save(token);
     }
 }
