@@ -96,6 +96,7 @@ public class AuthService {
         tokenService.removeToken(user);
         cookieUtil.clearCookie(response);
     }
+    @Cacheable(value = "users",key = "'id'")
     public UserResponse getMe(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         assert authentication != null;
