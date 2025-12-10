@@ -8,17 +8,22 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class JwtUtil {
     @Value("${jwt.secret}")
     private String secret;
@@ -33,28 +38,25 @@ public class JwtUtil {
     public void init(){
         this.signingKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
+    public String generateAccessToken(User user){
+        return  generateToken(user,accessTime);
+    }
+    public String generateRefreshToken(User user){
+        return  generateToken(user,refreshTime);
+    }
 
     public String generateToken(User user,Long expiryTime){
         return Jwts
                 .builder()
                 .setSubject(user.getUsername())
                 .claim("id",user.getId())
-                .claim("firstName",user.getFirstName())
-                .claim("lastName",user.getLastName())
-                .claim("email",user.getEmail())
                 .claim("role",user.getRole())
-                .claim("avatar",user.getAvatar())
                 .setExpiration(new Date(System.currentTimeMillis()+expiryTime))
                 .setIssuedAt(new Date())
                 .signWith(signingKey)
                 .compact();
     }
-    public Map<String,String> getTokens(User user){
-        Map<String,String> tokens = new HashMap<>();
-        tokens.put("accessToken",generateToken(user,accessTime));
-        tokens.put("refreshToken",generateToken(user,refreshTime));
-        return tokens;
-    }
+
     public Claims extractClaim(String token) throws BadRequestException {
         try {
             return Jwts

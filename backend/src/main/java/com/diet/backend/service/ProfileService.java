@@ -3,6 +3,7 @@ package com.diet.backend.service;
 import com.diet.backend.dto.UserRequest;
 import com.diet.backend.dto.UserResponse;
 import com.diet.backend.entity.User;
+import com.diet.backend.exception.BadRequestException;
 import com.diet.backend.exception.NotFoundException;
 import com.diet.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,9 @@ public class ProfileService {
         User existUser = (User) authentication.getPrincipal();
         assert existUser != null;
         User user = userRepository.findById(existUser.getId()).orElseThrow(()-> new NotFoundException("User not found"));
+        if (!existUser.getId().equals(user.getId())){
+            throw new BadRequestException("Only author can edit this profile");
+        }
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setUsername(request.getUsername());

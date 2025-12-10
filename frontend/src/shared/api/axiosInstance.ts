@@ -9,7 +9,10 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
     config => {
         const token = localStorage.getItem("accessToken");
-        if (token && config.url?.includes("/auth/refresh")) {
+        if (config.url?.includes("/auth/refresh")) {
+            return config;
+        }
+        if (token){
             config.headers['Authorization'] = `Bearer ${token}`;
         }
         return config;
@@ -21,12 +24,6 @@ axiosInstance.interceptors.response.use(
     config=>config,
     async (error)=>{
         const originalRequest = error.config;
-
-        if(originalRequest.url?.includes("/auth/refresh")){
-            localStorage.removeItem("accessToken");
-            window.location.href="/login";
-            return Promise.reject(error);
-        }
 
         if(error.response.status === 401 && !originalRequest._retry){
             originalRequest._retry = true;

@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import type { IUser } from "@/features/auth/model/user.types"
+import axiosInstance from "@/shared/api/axiosInstance"
 import Footer from "@/widgets/footer/Footer"
 import NavbarLayout from "@/widgets/navbar/NavbarLayout"
 import { Star } from "lucide-react"
+import { useEffect } from "react"
 
 const Home = () => {
   // const navigate = useNavigate();
@@ -12,6 +15,19 @@ const Home = () => {
   //     navigate("/login");
   //   }
   // }, [navigate]);
+
+  
+  useEffect(() => {
+    const getMe = async () =>{
+    try {
+      const {data}:{data:IUser} = await axiosInstance.get("/auth/me");
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  getMe();
+  },[]);
 
 
 

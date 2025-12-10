@@ -6,6 +6,7 @@ import com.diet.backend.exception.BadRequestException;
 import com.diet.backend.exception.NotFoundException;
 import com.diet.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
+    @Cacheable(value = "users", key = "'allUsers'")
     @Transactional
     public List<UserResponse> userList(){
         List<User> users = userRepository.findAll();
@@ -30,6 +32,7 @@ public class UserService {
         )).toList();
     }
     @Transactional
+    @Cacheable(value = "users", key = "#id")
     public UserResponse getAUserById(String id){
         if (id == null){
             throw new BadRequestException("Invalid id");

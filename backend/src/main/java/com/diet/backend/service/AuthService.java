@@ -1,6 +1,7 @@
 package com.diet.backend.service;
 
 import com.diet.backend.dto.*;
+import com.diet.backend.entity.Token;
 import com.diet.backend.entity.User;
 import com.diet.backend.enums.Role;
 import com.diet.backend.exception.BadRequestException;
@@ -27,6 +28,7 @@ public class AuthService {
     private final CookieUtil cookieUtil;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
+    private final OnlyUserService onlyUserService;
 
     public AuthResponse authResponse(User user,String accessToken){
         return new AuthResponse(
@@ -54,11 +56,11 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.USER);
         user.setAvatar("https://github.com/shadcn.png");
-        user=userRepository.save(user);
+        user=onlyUserService.saveUser(user);
         String accessToken = tokenService.getTokens(user).get("accessToken");
         String refreshToken = tokenService.getTokens(user).get("refreshToken");
-        tokenService.create(user,refreshToken);
-        cookieUtil.addCookie(refreshToken,response);
+        Token token = tokenService.saveRefreshToken(user,refreshToken);
+        cookieUtil.addCookie(token.getRefreshToken(),response);
         return authResponse(user,accessToken);
     }
     @Transactional
@@ -69,7 +71,7 @@ public class AuthService {
         }
         String accessToken = tokenService.getTokens(user).get("accessToken");
         String refreshToken = tokenService.getTokens(user).get("refreshToken");
-        tokenService.regenerateToken(user,refreshToken);
+        tokenService.saveRefreshToken(user,refreshToken);
         cookieUtil.addCookie(refreshToken,response);
         return authResponse(user,accessToken);
     }
@@ -78,11 +80,11 @@ public class AuthService {
         String username = tokenService.extractUsername(refreshToken);
         tokenService.validateToken(refreshToken,username);
         User user = findUserByUsername(username);
-        String accessToken = tokenService.getTokens(user).get("accessToken");
+        String newAccessToken = tokenService.getTokens(user).get("accessToken");
         String newRefreshToken = tokenService.getTokens(user).get("refreshToken");
-        tokenService.regenerateToken(user,newRefreshToken);
-        cookieUtil.addCookie(newRefreshToken,response);
-        return authResponse(user,accessToken);
+        Token token = tokenService.saveRefreshToken(user,newRefreshToken);
+        cookieUtil.addCookie(token.getRefreshToken(),response);
+        return authResponse(user,newAccessToken);
     }
     @Transactional
     public void logout(String refreshToken,HttpServletResponse response)  {
@@ -120,7 +122,7 @@ public class AuthService {
         tokenService.validateToken(request.getToken(),username);
         User user = findUserByUsername(username);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        userRepository.save(user);
+        onlyUserService.saveUser(user);
     }
     public User findUserByUsername(String username){
         return userRepository.findByUsername(username).orElseThrow(()->new NotFoundException("User not found"));
