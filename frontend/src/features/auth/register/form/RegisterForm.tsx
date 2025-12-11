@@ -30,7 +30,7 @@ const RegisterForm = () => {
       const {data} = await axiosInstance.post("/auth/register",values);
       if(data){
         localStorage.setItem("accessToken",data.accessToken);
-        login(data.accessToken);
+        login(data);
         await new Promise(r => setTimeout(r,1000));
         toast.success("Successfully");
         navigate('/');

@@ -24,16 +24,16 @@ public class TokenService {
 
     @Transactional
     public Token saveRefreshToken(User user,String refreshToken){
-        Optional<Token> optional = tokenRepository.findByUser(user);
+        Optional<Token> optional = tokenRepository.findByUserId(user.getId());
         Token token = optional.orElseGet(Token::new);
         token.setUser(user.getId());
         token.setRefreshToken(refreshToken);
-        token.setExpiryDate(LocalDateTime.now().plusSeconds(jwtUtil.getRefreshTime()/1000));
+        token.setExpiryDate(LocalDateTime.now().plusSeconds(jwtUtil.getRefreshTime()));
         return saveUser(token);
     }
     @Transactional
     public void removeToken(User user){
-        Token token = tokenRepository.findByUser(user).orElseThrow(()-> new NotFoundException("User not found"));
+        Token token = tokenRepository.findByUserId(user.getId()).orElseThrow(()-> new NotFoundException("User not found"));
         tokenRepository.delete(token);
     }
 

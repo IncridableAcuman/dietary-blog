@@ -21,6 +21,7 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
             const { data } = await axiosInstance.post('/auth/logout');
             if (data) {
                 logout();
+                localStorage.removeItem("accessToken");
                 await new Promise(r => setTimeout(r, 1000));
                 toast.success(data);
                 navigate("/");
@@ -33,17 +34,22 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
         }
     }
     
-    const getMe = useCallback(async ()=>{
+    const getMe = useCallback(async () => {
         try {
-            const {data} = await axiosInstance.get("/auth/me");
-            setUser(data);
+            setIsLoading(true);
+            const { data } = await axiosInstance.get('/auth/me');
+            if (data) {
+                setUser(data);
+            }
         } catch (error) {
             console.log(error);
+        } finally {
+            setIsLoading(false);
         }
-    },[setUser]);
+    }, [setIsLoading, setUser]);
 
     useEffect(() => {
-        if(isAuthenticated){
+        if (isAuthenticated) {
             getMe();
         }
     }, [getMe, isAuthenticated]);
@@ -68,7 +74,7 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
 
                         )}
                     </div>
-                    <p className="border-b-2 pb-3 w-full text-center border-dashed">{user.email ?? 'example@gmail.com'}</p>
+                    <p className="border-b-2 pb-3 w-full text-center border-dashed">{user?.email ?? 'example@gmail.com'}</p>
                 </SheetHeader>
                 <div className="py-4 px-5">
                             <div className="space-y-4">
@@ -77,21 +83,21 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
                                         <UserRound size={20} />
                                         First Name:
                                     </div>
-                                    <p className="pl-8 font-bold text-gray-600">{user.firstName ?? 'John'}</p>
+                                    <p className="pl-8 font-bold text-gray-600">{user?.firstName ?? 'John'}</p>
                                 </div>
                                 <div className="flex items-center py-2">
                                     <div className="flex items-center gap-3 text-sm ">
                                         <UserRound size={20} />
                                         Last Name:
                                     </div>
-                                    <p className="pl-8 font-bold text-gray-600">{user.lastName ?? 'Doe'}</p>
+                                    <p className="pl-8 font-bold text-gray-600">{user?.lastName ?? 'Doe'}</p>
                                 </div>
                                 <div className="py-2 flex items-center">
                                     <div className="flex items-center gap-3 text-sm">
                                         <UserRound size={20} />
                                         Username
                                     </div>
-                                    <p className="pl-8 font-bold text-gray-600">{user.username ?? 'JohnDoe'}</p>
+                                    <p className="pl-8 font-bold text-gray-600">{user?.username ?? 'JohnDoe'}</p>
                                 </div>
 
                             </div>
