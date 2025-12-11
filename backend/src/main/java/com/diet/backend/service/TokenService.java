@@ -26,7 +26,7 @@ public class TokenService {
     public Token saveRefreshToken(User user,String refreshToken){
         Optional<Token> optional = tokenRepository.findByUser(user);
         Token token = optional.orElseGet(Token::new);
-        token.setUser(user);
+        token.setUser(user.getId());
         token.setRefreshToken(refreshToken);
         token.setExpiryDate(LocalDateTime.now().plusSeconds(jwtUtil.getRefreshTime()/1000));
         return saveUser(token);

@@ -100,7 +100,6 @@ public class PostService {
         post.setCategory(request.getCategory());
         post.setTags(request.getTags());
         post.setImage(fileService.saveFile(request.getImage()));
-        post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
         post.setAuthorId(user.getId());
         post.setCommentIds(Collections.singletonList("A"));

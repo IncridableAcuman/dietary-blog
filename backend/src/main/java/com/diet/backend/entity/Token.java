@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Getter
+@Setter
 public class Token {
     @Id
     private String id;
@@ -19,4 +21,8 @@ public class Token {
     private String refreshToken;
 
     private LocalDateTime expiryDate;
+
+    public void setUser(String id) {
+        this.userId=id;
+    }
 }

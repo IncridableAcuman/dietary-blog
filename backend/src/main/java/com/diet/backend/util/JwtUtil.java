@@ -36,6 +36,9 @@ public class JwtUtil {
 
     @PostConstruct
     public void init(){
+        if (secret.getBytes(StandardCharsets.UTF_8).length < 32){
+            throw new IllegalArgumentException("JWT secret must be at least 32 bytes!");
+        }
         this.signingKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
     public String generateAccessToken(User user){
