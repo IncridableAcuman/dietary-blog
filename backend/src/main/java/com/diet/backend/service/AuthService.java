@@ -77,7 +77,7 @@ public class AuthService {
         return authResponse(user,accessToken);
     }
     @Transactional
-    @Cacheable(value = "refreshToken", key = "'token'")
+    @Cacheable(value = "refreshToken", key = "#refreshToken")
     public AuthResponse refresh(String refreshToken,HttpServletResponse response) throws BadRequestException {
         String username = tokenService.extractUsername(refreshToken);
         tokenService.validateToken(refreshToken,username);

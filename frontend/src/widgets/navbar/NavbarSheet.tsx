@@ -4,15 +4,13 @@ import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, 
 import axiosInstance from "@/shared/api/axiosInstance"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { Pen, UserRound } from "lucide-react"
+import { useCallback, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 
 const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolean) => void }) => {
-    const userData = [
-        { firstName: "Izzatbek", lastName: "Abdusharipov", username: "IncridableAcuman", email: "example@gmail.com" }
-    ];
     const navigate = useNavigate();
-    const { setIsLoading, logout} = useAuthStore();
+    const { setIsLoading, logout,user,setUser } = useAuthStore();
     const { isAuthenticated } = useAuthStore();
 
 
@@ -34,8 +32,21 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
             setIsLoading(false);
         }
     }
+    
+    const getMe = useCallback(async ()=>{
+        try {
+            const {data} = await axiosInstance.get("/auth/me");
+            setUser(data);
+        } catch (error) {
+            console.log(error);
+        }
+    },[setUser]);
 
-
+    useEffect(() => {
+        if(isAuthenticated){
+            getMe();
+        }
+    }, [getMe, isAuthenticated]);
 
     return (
         <Sheet open={open} onOpenChange={setOpen} >
@@ -57,37 +68,33 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
 
                         )}
                     </div>
-                    <p className="border-b-2 pb-3 w-full text-center border-dashed">abdusharipovizzat03@gmail.com</p>
+                    <p className="border-b-2 pb-3 w-full text-center border-dashed">{user.email ?? 'example@gmail.com'}</p>
                 </SheetHeader>
                 <div className="py-4 px-5">
-                    {userData
-                        .map((user, index) => (
-                            <div className="space-y-4" key={index}>
+                            <div className="space-y-4">
                                 <div className="py-2 flex items-center">
                                     <div className="flex items-center gap-3 text-sm e">
                                         <UserRound size={20} />
                                         First Name:
                                     </div>
-                                    <p className="pl-8 font-bold text-gray-600">{user.firstName}</p>
+                                    <p className="pl-8 font-bold text-gray-600">{user.firstName ?? 'John'}</p>
                                 </div>
                                 <div className="flex items-center py-2">
                                     <div className="flex items-center gap-3 text-sm ">
                                         <UserRound size={20} />
                                         Last Name:
                                     </div>
-                                    <p className="pl-8 font-bold text-gray-600">{user.lastName}</p>
+                                    <p className="pl-8 font-bold text-gray-600">{user.lastName ?? 'Doe'}</p>
                                 </div>
                                 <div className="py-2 flex items-center">
                                     <div className="flex items-center gap-3 text-sm">
                                         <UserRound size={20} />
                                         Username
                                     </div>
-                                    <p className="pl-8 font-bold text-gray-600">{user.username}</p>
+                                    <p className="pl-8 font-bold text-gray-600">{user.username ?? 'JohnDoe'}</p>
                                 </div>
 
                             </div>
-                        ))
-                    }
                 </div>
                 <SheetFooter>
                     <SheetClose asChild>

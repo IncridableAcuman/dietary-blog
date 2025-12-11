@@ -14,7 +14,7 @@ public class Token {
     @Id
     private String id;
 
-    private User user;
+    private String userId;
 
     private String refreshToken;
 
