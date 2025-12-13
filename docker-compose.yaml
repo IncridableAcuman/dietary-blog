@@ -11,19 +11,6 @@ services:
       - "8080"
     networks:
       - fullstack-networks
-  
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    image: node:22-alpine
-    container_name: frontend-container
-    ports:
-      - "3000:80"
-    depends_on:
-      - backend
-    networks:
-      - fullstack-networks
 
 networks:
   fullstack-networks:
