@@ -85,7 +85,7 @@ public class JwtUtil {
             Claims claims = extractClaim(token);
             return claims.getSubject().equals(username) && claims.getExpiration().after(new Date());
         } catch (RuntimeException e) {
-            throw new BadRequestException("Invalid token");
+            return false;
         }
     }
 }

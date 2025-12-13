@@ -7,17 +7,18 @@ import com.diet.backend.entity.User;
 import com.diet.backend.exception.BadRequestException;
 import com.diet.backend.exception.NotFoundException;
 import com.diet.backend.repository.PostRepository;
+import com.diet.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -25,6 +26,7 @@ import java.util.List;
 public class PostService {
     private final PostRepository postRepository;
     private final FileService fileService;
+    private final UserRepository userRepository;
 
     public PostResponse postResponse(Post post){
         return new PostResponse(
@@ -33,11 +35,9 @@ public class PostService {
                 post.getContent(),
                 post.getAuthorId(),
                 post.getImage(),
-                post.getTags(),
                 post.getCategory(),
                 post.getCreatedAt(),
-                post.getUpdatedAt(),
-                post.getCommentIds()
+                post.getUpdatedAt()
         );
     }
 
@@ -45,18 +45,19 @@ public class PostService {
     public PostResponse createPost(PostRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         assert authentication != null;
-        User user = (User) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        assert userDetails != null;
+        String username = userDetails.getUsername();
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
         Post post = new Post();
         post.setTitle(request.getTitle());
         post.setContent(request.getContent());
         post.setCategory(request.getCategory());
-        post.setTags(request.getTags());
         post.setImage(fileService.saveFile(request.getImage()));
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
         assert user != null;
         post.setAuthorId(user.getId());
-        post.setCommentIds(Collections.singletonList("A"));
         post = savePost(post);
         return postResponse(post);
     }
@@ -72,13 +73,15 @@ public class PostService {
         return postResponse(post);
     }
     @Transactional
-    @CacheEvict(value = "posts",key = "#id")
+    @CacheEvict(value = "posts",allEntries = true)
     public PostResponse remove(String id){
         Post post = findPostById(id);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         assert authentication != null;
-        User user = (User) authentication.getPrincipal();
-        assert user != null;
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        assert userDetails != null;
+        String username = userDetails.getUsername();
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
         if (!post.getAuthorId().equals(user.getId())){
             throw new BadRequestException("Only author can delete this post");
         }
@@ -90,19 +93,19 @@ public class PostService {
         Post post = findPostById(id);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         assert authentication != null;
-        User user = (User) authentication.getPrincipal();
-        assert user != null;
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        assert userDetails != null;
+        String username = userDetails.getUsername();
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
         if (!post.getAuthorId().equals(user.getId())){
-            throw new BadRequestException("Only author can delete this post");
+            throw new BadRequestException("Only author can edit this post");
         }
         post.setTitle(request.getTitle());
         post.setContent(request.getContent());
         post.setCategory(request.getCategory());
-        post.setTags(request.getTags());
         post.setImage(fileService.saveFile(request.getImage()));
         post.setUpdatedAt(LocalDateTime.now());
         post.setAuthorId(user.getId());
-        post.setCommentIds(Collections.singletonList("A"));
         post = postRepository.save(post);
         return postResponse(post);
     }

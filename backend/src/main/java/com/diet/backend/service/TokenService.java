@@ -28,7 +28,7 @@ public class TokenService {
         Token token = optional.orElseGet(Token::new);
         token.setUser(user.getId());
         token.setRefreshToken(refreshToken);
-        token.setExpiryDate(LocalDateTime.now().plusSeconds(jwtUtil.getRefreshTime()));
+        token.setExpiryDate(LocalDateTime.now().plusDays(7));
         return saveUser(token);
     }
     @Transactional

@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-
 @Service
 @RequiredArgsConstructor
 public class ProfileService {
@@ -23,7 +21,6 @@ public class ProfileService {
         if (!user.getId().equals(id)){
             throw new BadRequestException("Only author can edit this profile");
         }
-        Arrays.f
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setUsername(request.getUsername());

@@ -11,7 +11,6 @@ import com.diet.backend.util.CookieUtil;
 import com.diet.backend.util.MailUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,7 +74,6 @@ public class AuthService {
         return authResponse(user,accessToken);
     }
     @Transactional
-    @Cacheable(value = "refreshToken", key = "#refreshToken")
     public AuthResponse refresh(String refreshToken,HttpServletResponse response) throws BadRequestException {
         String username = tokenService.extractUsername(refreshToken);
         tokenService.validateToken(refreshToken,username);

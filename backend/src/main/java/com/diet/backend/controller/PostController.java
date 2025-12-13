@@ -16,7 +16,7 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
 
-    @PostMapping("/post")
+    @PostMapping
     public ResponseEntity<PostResponse> createPost(@ModelAttribute PostRequest postRequest){
         return ResponseEntity.ok(postService.createPost(postRequest));
     }
@@ -33,7 +33,7 @@ public class PostController {
         return ResponseEntity.ok(postService.remove(id));
     }
     @PatchMapping("/{id}")
-    public ResponseEntity<PostResponse> editPost(@PathVariable String id,@Valid @RequestBody PostRequest request){
+    public ResponseEntity<PostResponse> editPost(@PathVariable String id,@Valid @ModelAttribute PostRequest request){
         return ResponseEntity.ok(postService.editPost(id,request));
     }
 }

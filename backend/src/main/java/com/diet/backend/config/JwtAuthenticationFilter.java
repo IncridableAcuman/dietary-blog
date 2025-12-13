@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,32 +30,41 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NotNull HttpServletResponse response,
             @NotNull FilterChain filterChain
     ) throws ServletException, IOException {
-        final String header = request.getHeader("Authorization");
-        if (header == null || !header.startsWith("Bearer ")){
+
+        final String authHeader = request.getHeader("Authorization");
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")){
             filterChain.doFilter(request,response);
             return;
         }
-        String jwt=header.substring(7);
-        String username;
+
+        String jwt= authHeader.substring(7);
 
         try {
-            username = jwtUtil.extractSubject(jwt);
-        } catch (UnAuthorizeException e){
-            filterChain.doFilter(request,response);
-            return;
-        }
+            String username = jwtUtil.extractSubject(jwt);
 
-        if (SecurityContextHolder.getContext().getAuthentication() == null){
-            UserDetails userDetails = service.loadUserByUsername(username);
+            if (SecurityContextHolder.getContext().getAuthentication() == null){
+                UserDetails userDetails = service.loadUserByUsername(username);
 
-            if (jwtUtil.validateToken(jwt,username)){
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                if (jwtUtil.validateToken(jwt,username)){
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
+            filterChain.doFilter(request,response);
+
+        } catch (UnAuthorizeException e){
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setContentType("application/json");
+            response.getWriter().write("""
+                    {
+                                  "status": 401,
+                                  "error": "Unauthorized",
+                                  "message": "%s"
+                                }
+                    """.formatted(e.getMessage()));
         }
-        filterChain.doFilter(request,response);
     }
 }
