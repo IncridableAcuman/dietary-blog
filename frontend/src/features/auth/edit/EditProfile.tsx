@@ -5,13 +5,13 @@ import NavbarLayout from "@/widgets/navbar/NavbarLayout"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { useForm } from "react-hook-form"
-import { UserSchema } from "../model/user.schema"
 import { Input } from "@/components/ui/input"
 import Footer from "@/widgets/footer/Footer"
+import { EditProfileSchema } from "./schema/edit.schema"
 const EditProfile = () => {
 
     const form = useForm({
-        resolver: zodResolver(UserSchema),
+        resolver: zodResolver(EditProfileSchema),
         defaultValues: {
             firstName: "",
             lastName: "",
