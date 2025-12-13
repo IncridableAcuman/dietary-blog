@@ -9,7 +9,7 @@ import { toast } from "sonner"
 
 const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolean) => void }) => {
     const navigate = useNavigate();
-    const { clearAuth, user, isAuthenticated } = useAuthStore();
+    const { user, isAuthenticated } = useAuthStore();
 
 
     const onSubmit = async () => {
@@ -27,7 +27,6 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
 
         } finally {
             localStorage.removeItem("accessToken");
-            clearAuth();
             navigate("/login");
         }
     }
@@ -47,10 +46,7 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
                     </Avatar>
                     <div className="flex items-center gap-3">
                         <SheetTitle className="text-center">User Profile</SheetTitle>
-                        {isAuthenticated && (
-                            <Pen size={15} onClick={() => navigate("/profile")} className="cursor-pointer text-gray-500 hover:text-gray-700 transition duration-300" />
-
-                        )}
+                        <Pen size={15} onClick={() => navigate("/profile")} className="cursor-pointer text-gray-500 hover:text-gray-700 transition duration-300" />
                     </div>
                     <p className="border-b-2 pb-3 w-full text-center border-dashed">{user?.email ?? 'example@gmail.com'}</p>
                 </SheetHeader>
@@ -82,9 +78,7 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
                 </div>
                 <SheetFooter>
                     <SheetClose asChild>
-                        {isAuthenticated && (
-                            <Button onClick={() => onSubmit()}>Sign Out</Button>
-                        )}
+                        <Button onClick={() => onSubmit()}>Sign Out</Button>
                     </SheetClose>
                 </SheetFooter>
             </SheetContent>

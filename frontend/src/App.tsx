@@ -1,28 +1,10 @@
-import { useEffect } from "react";
 import { AppRouter } from "./app/routes/routes"
 import { useAuthStore } from "./app/store/auth/auth.store";
 import "./app/styles/global.css"
 import { Spinner } from "./components/ui/spinner";
-import axiosInstance from "./shared/api/axiosInstance";
 const App = () => {
-  const { isLoading, setUser, clearAuth } = useAuthStore();
+  const { isLoading } = useAuthStore();
 
-  useEffect(() => {
-    const initAuth = async () => {
-      const token = localStorage.getItem("accessToken");
-      if (!token) return;
-
-      try {
-        const { data } = await axiosInstance.get("/auth/me");
-        setUser(data);
-      } catch {
-        localStorage.removeItem("accessToken");
-        clearAuth();
-      }
-    };
-
-    initAuth();
-  }, [clearAuth, setUser]);
 
 
   return (
