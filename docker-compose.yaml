@@ -12,6 +12,19 @@ services:
     networks:
       - fullstack-networks
 
+  redis:
+    image: redis:7.4-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+
 networks:
   fullstack-networks:
     driver: bridge
+
+volumes:
+  redis-data:
+    driver: local
