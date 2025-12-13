@@ -2,6 +2,7 @@ package com.diet.backend.util;
 
 import com.diet.backend.entity.User;
 import com.diet.backend.exception.BadRequestException;
+import com.diet.backend.exception.UnAuthorizeException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -70,7 +71,7 @@ public class JwtUtil {
                     .getBody();
         }
         catch (ExpiredJwtException e){
-            return e.getClaims();
+            throw new UnAuthorizeException("Token expired");
         }
         catch (JwtException e){
             throw new BadRequestException("Invalid token: " + e.getMessage());

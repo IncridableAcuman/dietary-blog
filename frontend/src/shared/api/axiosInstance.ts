@@ -9,7 +9,13 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
     config => {
         const token = localStorage.getItem("accessToken");
-        if (token){
+        const isAuthRoute = config.url?.includes("/auth/login") || 
+        config.url?.includes("/auth/register") ||
+        config.url?.includes("/auth/refresh") ||
+        config.url?.includes("/auth/forgot-password") ||
+        config.url?.includes("/auth/reset-password");
+
+        if (token && !isAuthRoute){
             config.headers['Authorization'] = `Bearer ${token}`;
         }
         return config;
@@ -18,8 +24,11 @@ axiosInstance.interceptors.request.use(
 );
 
 axiosInstance.interceptors.response.use(
-    config=>config,
+    response=>response,
     async (error)=>{
+        if(!error.response){
+            return Promise.reject(error);
+        }
         const originalRequest = error.config;
 
         if(error.response.status === 401 && !originalRequest._retry){
