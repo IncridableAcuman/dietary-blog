@@ -3,8 +3,6 @@ package com.diet.backend.config;
 import com.diet.backend.exception.UnAuthorizeException;
 import com.diet.backend.service.UserDetailsService;
 import com.diet.backend.util.JwtUtil;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,32 +30,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NotNull FilterChain filterChain
     ) throws ServletException, IOException {
         final String header = request.getHeader("Authorization");
-        String jwt=null;
-        String username=null;
-        if (header != null && header.startsWith("Bearer ")){
-            jwt=header.substring(7);
-            try {
-                username=jwtUtil.extractSubject(jwt);
-            } catch (ExpiredJwtException e){
-                throw new UnAuthorizeException("Token expired");
-            } catch (JwtException e){
-                throw new UnAuthorizeException("Invalid token");
-            }
+        if (header == null || !header.startsWith("Bearer ")){
+            filterChain.doFilter(request,response);
+            return;
         }
-        if (username!=null && SecurityContextHolder.getContext().getAuthentication() == null){
-            UserDetails userDetails=this.service.loadUserByUsername(username);
-            try {
-                if (jwtUtil.validateToken(jwt,username)){
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
-                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                } else {
-                    throw new UnAuthorizeException("Token is not valid");
-                }
-            } catch (RuntimeException e) {
-                throw new UnAuthorizeException("User unauthorized");
-            }
+        String jwt=header.substring(7);
+        String username;
 
+        try {
+            username = jwtUtil.extractSubject(jwt);
+        } catch (UnAuthorizeException e){
+            filterChain.doFilter(request,response);
+            return;
+        }
+
+        if (SecurityContextHolder.getContext().getAuthentication() == null){
+            UserDetails userDetails = service.loadUserByUsername(username);
+
+            if (jwtUtil.validateToken(jwt,username)){
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
         }
         filterChain.doFilter(request,response);
     }

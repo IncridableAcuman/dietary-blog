@@ -80,13 +80,10 @@ public class JwtUtil {
     public String extractSubject(String token)  {
         return extractClaim(token).getSubject();
     }
-    public Date extractExpiryDate(String token) throws BadRequestException {
-        return extractClaim(token).getExpiration();
-    }
     public boolean validateToken(String token,String username) {
         try {
-            final String extractUsername = extractSubject(token);
-            return extractExpiryDate(token).after(new Date()) && extractUsername.equals(username);
+            Claims claims = extractClaim(token);
+            return claims.getSubject().equals(username) && claims.getExpiration().after(new Date());
         } catch (RuntimeException e) {
             throw new BadRequestException("Invalid token");
         }

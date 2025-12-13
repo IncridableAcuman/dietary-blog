@@ -1,6 +1,7 @@
 import { useAuthStore } from "@/app/store/auth/auth.store"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import type { IUser } from "@/features/auth/model/user.types"
 import axiosInstance from "@/shared/api/axiosInstance"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { Pen, UserRound } from "lucide-react"
@@ -10,8 +11,8 @@ import { toast } from "sonner"
 
 const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolean) => void }) => {
     const navigate = useNavigate();
-    const { setIsLoading, logout,user,setUser } = useAuthStore();
-    const { isAuthenticated } = useAuthStore();
+    const { setIsLoading,user,setUser } = useAuthStore();
+    const { isAuthenticated,setIsAuthenticated } = useAuthStore();
 
 
     const onSubmit = async () => {
@@ -20,9 +21,10 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
             setIsLoading(true);
             const { data } = await axiosInstance.post('/auth/logout');
             if (data) {
-                logout();
                 localStorage.removeItem("accessToken");
                 await new Promise(r => setTimeout(r, 1000));
+                setIsAuthenticated(false);
+                setUser({} as IUser);
                 toast.success(data);
                 navigate("/");
             }
@@ -31,6 +33,7 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
             toast.error("Logged out failed");
         } finally {
             setIsLoading(false);
+            setIsAuthenticated(false);
         }
     }
     

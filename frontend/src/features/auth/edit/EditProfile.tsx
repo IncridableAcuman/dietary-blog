@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
 
 const EditProfile = () => {
-    const { isAuthenticated } = useAuthStore();
+    const { isAuthenticated, user } = useAuthStore();
     const navigate = useNavigate();
 
     const form = useForm({
@@ -25,6 +25,8 @@ const EditProfile = () => {
             avatar: ""
         },
     })
+
+    console.log(user);
 
     useEffect(()=> {
         if(!isAuthenticated){

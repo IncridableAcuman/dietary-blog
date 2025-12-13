@@ -17,13 +17,13 @@ public class CorsConfig {
 
         config.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
         config.setAllowCredentials(true);
-        config.setAllowedOriginPatterns(List.of("http://localhost:5173"));
+        config.setAllowedOrigins(List.of("http://localhost:5173"));
         config.setAllowedHeaders(List.of(
                 "Authorization",
                 "Accept",
                 "Content-Type",
                 "Origin",
-                "X-Request-With",
+                "X-Requested-With",
                 "Cookie"
         ));
         config.setExposedHeaders(List.of("Authorization","Set-Cookie"));
