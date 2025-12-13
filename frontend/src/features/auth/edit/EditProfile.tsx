@@ -18,7 +18,7 @@ const EditProfile = () => {
             username: "",
             avatar: ""
         },
-    })
+    });
 
 
     return (
@@ -58,7 +58,7 @@ const EditProfile = () => {
                                                         <FormItem className="w-full">
                                                             <FormLabel>First Name</FormLabel>
                                                             <FormControl>
-                                                                <Input type="text" placeholder="Izzatbek" {...field} />
+                                                                <Input type="text" placeholder="Izzatbek"  {...field} />
                                                             </FormControl>
                                                             <FormMessage />
                                                         </FormItem>

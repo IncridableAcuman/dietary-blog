@@ -9,7 +9,7 @@ import { toast } from "sonner"
 
 const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolean) => void }) => {
     const navigate = useNavigate();
-    const { user, isAuthenticated } = useAuthStore();
+    const { user } = useAuthStore();
 
 
     const onSubmit = async () => {
@@ -23,7 +23,7 @@ const NavbarSheet = ({ open, setOpen }: { open: boolean, setOpen: (value: boolea
             await new Promise(r => setTimeout(r, 1000));
 
             toast.success("Successfully logged out");
-            navigate("/");
+            navigate("/login");
 
         } finally {
             localStorage.removeItem("accessToken");

@@ -35,10 +35,6 @@ public class AuthController {
     public ResponseEntity<AuthResponse> refresh(@CookieValue(name = "refreshToken",required = false) String refreshToken,HttpServletResponse response)  {
         return ResponseEntity.ok(authService.refresh(refreshToken,response));
     }
-    @GetMapping("/me")
-    public ResponseEntity<UserResponse> getMe(){
-        return ResponseEntity.ok(authService.getMe());
-    }
     @PutMapping("/reset-password")
     public ResponseEntity<String> updatePassword(@Valid @RequestBody ResetPasswordRequest request)  {
         authService.updatePassword(request);

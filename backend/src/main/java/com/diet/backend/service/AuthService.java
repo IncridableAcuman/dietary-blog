@@ -12,8 +12,6 @@ import com.diet.backend.util.MailUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,22 +93,6 @@ public class AuthService {
         User user = findUserByUsername(username);
         tokenService.removeToken(user);
         cookieUtil.clearCookie(response);
-    }
-    @Cacheable(value = "users",key = "'id'")
-    public UserResponse getMe(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        assert authentication != null;
-        User user = (User) authentication.getPrincipal();
-        assert user != null;
-        return new UserResponse(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getRole(),
-                user.getAvatar()
-        );
     }
     @Transactional
     public void forgotPassword(ForgotPasswordRequest request){
