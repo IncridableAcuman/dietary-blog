@@ -32,6 +32,7 @@ const RegisterForm = () => {
       const {data} = await axiosInstance.post("/auth/register",values);
 
         localStorage.setItem("accessToken",data.accessToken);
+        localStorage.setItem('id',data.id);
 
         await new Promise(r => setTimeout(r,1000));
 

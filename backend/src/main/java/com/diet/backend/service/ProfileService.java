@@ -7,8 +7,6 @@ import com.diet.backend.exception.BadRequestException;
 import com.diet.backend.exception.NotFoundException;
 import com.diet.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,13 +16,9 @@ public class ProfileService {
     private final FileService fileService;
     private final UserRepository userRepository;
     @Transactional
-    public UserResponse editProfile(UserRequest request){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        assert authentication != null;
-        User existUser = (User) authentication.getPrincipal();
-        assert existUser != null;
-        User user = userRepository.findById(existUser.getId()).orElseThrow(()-> new NotFoundException("User not found"));
-        if (!existUser.getId().equals(user.getId())){
+    public UserResponse editProfile(String id,UserRequest request){
+        User user = userRepository.findById(id).orElseThrow(()-> new NotFoundException("User not found"));
+        if (!user.getId().equals(id)){
             throw new BadRequestException("Only author can edit this profile");
         }
         user.setFirstName(request.getFirstName());

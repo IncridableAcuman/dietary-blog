@@ -30,6 +30,7 @@ const LoginForm = () => {
             const {data} = await axiosInstance.post("/auth/login",values);
 
                 localStorage.setItem("accessToken",data.accessToken);
+                localStorage.setItem('id',data.id);
 
                 await new Promise(r => setTimeout(r,1200));
 

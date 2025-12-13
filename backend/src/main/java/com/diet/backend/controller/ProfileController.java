@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 public class ProfileController {
     private final ProfileService profileService;
 
-    @PatchMapping("/edit")
-    public ResponseEntity<UserResponse> editProfile(@ModelAttribute UserRequest request){
-        return ResponseEntity.ok(profileService.editProfile(request));
+    @PatchMapping("/edit/{id}")
+    public ResponseEntity<UserResponse> editProfile(@PathVariable String id,@ModelAttribute UserRequest request){
+        return ResponseEntity.ok(profileService.editProfile(id,request));
     }
 }

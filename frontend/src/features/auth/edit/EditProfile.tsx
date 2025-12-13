@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Label } from "@/components/ui/label"
 import NavbarLayout from "@/widgets/navbar/NavbarLayout"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
@@ -8,7 +7,15 @@ import { useForm } from "react-hook-form"
 import { Input } from "@/components/ui/input"
 import Footer from "@/widgets/footer/Footer"
 import { EditProfileSchema } from "./schema/edit.schema"
+import type { EditProfileFormType } from "./types/edit.type"
+import axiosInstance from "@/shared/api/axiosInstance"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { toast } from "sonner"
 const EditProfile = () => {
+    const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+    const navigate = useNavigate();
+    const id = localStorage.getItem("id");
 
     const form = useForm({
         resolver: zodResolver(EditProfileSchema),
@@ -16,9 +23,38 @@ const EditProfile = () => {
             firstName: "",
             lastName: "",
             username: "",
-            avatar: ""
+            avatar: null,
         },
     });
+
+    const onSubmit = async (data: EditProfileFormType) => {
+        try {
+            const formData = new FormData();
+            formData.append('firstName', data.firstName);
+            formData.append('lastName', data.lastName);
+            formData.append('username', data.username);
+            if (data?.avatar) {
+                formData.append('avatar', data.avatar);
+            }
+            const response = await axiosInstance.patch(`/profile/edit/${id}`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                }
+            });
+            toast.success("Profile updated successfully");
+            console.log(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(()=>{
+        if(!localStorage.getItem("accessToken")){
+            navigate("/login");
+        }
+    },[navigate]);
+
 
 
     return (
@@ -38,18 +74,33 @@ const EditProfile = () => {
                                     <Avatar
                                         className=""
                                     >
-                                        <AvatarImage src="https://github.com/shadcn.png" className="w-28 rounded-md" />
+                                        <AvatarImage src={avatarPreview || "https://github.com/shadcn.png"} className="w-28 rounded-md" />
                                         <AvatarFallback>AI</AvatarFallback>
                                     </Avatar>
-                                    <div className="p-4 space-y-4">
-                                        <Button variant={'secondary'}>Change avatar</Button>
-                                        <Label>JPG, GIF or PNG. 1MB max</Label>
-                                    </div>
                                 </div>
                                 {/* form */}
                                 <div className="pt-8">
                                     <Form {...form}>
-                                        <form className="space-y-4">
+                                        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+                                            <FormField
+                                                control={form.control}
+                                                name="avatar"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>Avatar URL</FormLabel>
+                                                        <FormControl>
+                                                           <Button variant={'outline'} className="cursor-pointer">
+                                                             <Input type="file" accept="/image/**" className="cursor-pointer" onChange={(e)=>{
+                                                                const file = e.target.files?.[0];
+                                                                field.onChange(file);
+                                                                if(file) setAvatarPreview(URL.createObjectURL(file));
+                                                             }} />
+                                                           </Button>
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
                                             <div className="flex flex-col md:flex-row items-center gap-3">
                                                 <FormField
                                                     control={form.control}
