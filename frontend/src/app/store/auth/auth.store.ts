@@ -4,9 +4,17 @@ import {create} from 'zustand';
 export const useAuthStore = create<AuthState>()(set => ({
 
     isLoading:false,
-    isAuthenticated:false,
-    user: {} as IUser | null,
-    setIsAuthenticated: (v) => set({isAuthenticated:v}),
+    isAuthenticated: false,
+    user: {} as IUser,
+  
     setIsLoading: (v) => set({isLoading:v}),
-    setUser:(user:IUser) => set(state => ({...state,user:user})),
+
+    setUser: (user) => set({
+        isAuthenticated: true,
+        user:user
+    }),
+    clearAuth: () => set({
+        isAuthenticated: false,
+        user: null
+    }),
 }));
